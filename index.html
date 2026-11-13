@@ -6,521 +6,1031 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Estudancia" />
-  <meta name="theme-color" content="#040814" />
+  <meta name="theme-color" content="#050914" />
   <link rel="manifest" href="./manifest.json" />
   <link rel="apple-touch-icon" href="./icon-512.png" />
-  <title>Organizancia Estudancia • Web & iOS</title>
+  <title>Organizancia Estudancia v2.4.0</title>
   <style>
     :root {
-      --bg-deep: #040814;
-      --bg-card: rgba(11, 19, 37, 0.86);
-      --border-glass: rgba(30, 41, 59, 0.9);
+      --bg-deep: #050914;
+      --bg-card: rgba(11, 19, 37, 0.88);
+      --bg-darker: #070D19;
+      --border: #1E293B;
       --cyan: #00F0FF;
       --emerald: #10B981;
       --purple: #A855F7;
       --amber: #F59E0B;
       --rose: #F43F5E;
-      --text-main: #F8FAFC;
-      --text-muted: #94A3B8;
+      --orange: #FF6B2C;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
     }
 
     * {
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", Roboto, sans-serif;
     }
 
     body {
       margin: 0;
-      background: radial-gradient(circle at 50% 12%, #0C1B38 0%, #050914 55%, #02040A 100%);
-      color: var(--text-main);
+      background: #050914;
+      color: var(--text);
       min-height: 100dvh;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: calc(86px + env(safe-area-inset-bottom));
+      padding-top: calc(68px + env(safe-area-inset-top));
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
       overflow-x: hidden;
     }
 
-    /* Top Bar */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      margin: 10px 14px;
-      padding: 12px 16px;
-      border-radius: 22px;
-      background: rgba(8, 14, 28, 0.85);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(0, 240, 255, 0.25);
+    /* Fundo Estrelado Fixo */
+    #starfieldBg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Floating Glass Top Bar */
+    .floating-topbar {
+      position: fixed;
+      top: calc(10px + env(safe-area-inset-top));
+      left: 12px;
+      right: 12px;
+      max-width: 560px;
+      margin: 0 auto;
+      z-index: 60;
+      padding: 10px 14px;
+      border-radius: 24px;
+      background: rgba(8, 15, 30, 0.86);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 240, 255, 0.28);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .brand { font-weight: 800; font-size: 16px; letter-spacing: -0.3px; }
-    .brand span { color: #FF6B2C; }
-    .top-actions { display: flex; gap: 8px; }
-    .icon-pill {
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: -0.3px;
+    }
+    .brand-accent { color: var(--orange); }
+    .top-actions { display: flex; align-items: center; gap: 6px; }
+    .top-icon-btn {
       background: #111D35;
-      border: 1px solid #1E293B;
+      border: 1px solid #243452;
       color: #E2E8F0;
       border-radius: 999px;
-      padding: 6px 11px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .container { padding: 6px 14px 20px; max-width: 560px; margin: 0 auto; }
-    .tab-view { display: none; animation: fadeIn 0.22s ease; }
-    .tab-view.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-    .glass-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-glass);
-      border-radius: 26px;
-      padding: 18px;
-      margin-bottom: 14px;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    /* Hero Timer & Canvas */
-    .orbit-box {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 20px 16px;
-    }
-    #planetCanvas { width: 210px; height: 210px; display: block; margin: 0 auto; }
-    .stage-badge {
-      margin-top: -10px;
-      padding: 5px 14px;
-      border-radius: 999px;
-      background: rgba(0, 240, 255, 0.12);
-      border: 1px solid rgba(0, 240, 255, 0.4);
-      color: var(--cyan);
-      font-size: 12px;
+      padding: 6px 10px;
+      font-size: 11.5px;
       font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.15s ease;
     }
-    .timer-display {
-      font-size: 52px;
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -1.5px;
-      margin: 12px 0 4px;
-      text-shadow: 0 0 24px rgba(0, 240, 255, 0.35);
-    }
-    .subject-selector {
-      width: 100%;
-      background: #0D172A;
-      color: #FFF;
-      border: 1px solid #1E293B;
-      border-radius: 14px;
-      padding: 11px 14px;
-      font-size: 14px;
-      font-weight: 700;
-      margin: 10px 0 14px;
-      outline: none;
-    }
-    .btn-row { display: flex; gap: 10px; width: 100%; }
-    .btn-primary {
-      flex: 1.4;
+    .top-icon-btn:active { transform: scale(0.93); }
+    .status-pill-active {
       background: linear-gradient(135deg, var(--emerald), #00D4B2);
       color: #022C22;
       border: none;
-      border-radius: 16px;
-      padding: 14px;
-      font-size: 15px;
+    }
+
+    .container {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 8px 14px 24px;
+    }
+
+    .tab-screen {
+      display: none;
+      animation: springEnter 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .tab-screen.active { display: block; }
+    @keyframes springEnter {
+      from { opacity: 0; transform: scale(0.97) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Cosmic Glass Cards */
+    .cosmic-card {
+      background: linear-gradient(165deg, rgba(13, 24, 46, 0.92) 0%, rgba(7, 13, 25, 0.95) 100%);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    .cosmic-card.glow-cyan { border-color: rgba(0, 240, 255, 0.45); }
+    .cosmic-card.glow-emerald { border-color: rgba(16, 185, 129, 0.45); }
+    .card-top-beam {
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--emerald), transparent);
+    }
+
+    /* Pills & Segmented Controls */
+    .segmented-row {
+      display: flex;
+      background: #080E1C;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 14px;
+    }
+    .seg-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 9px 6px;
+      border-radius: 999px;
+      font-size: 12px;
       font-weight: 800;
       cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
     }
-    .btn-secondary {
-      flex: 1;
-      background: #131E36;
-      color: #E2E8F0;
-      border: 1px solid #263554;
-      border-radius: 16px;
-      padding: 14px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
+    .seg-btn.active {
+      background: var(--orange);
+      color: #020617;
+      box-shadow: 0 2px 12px rgba(255, 107, 44, 0.4);
     }
 
-    /* Progress Bar */
-    .progress-track {
-      width: 100%;
-      height: 8px;
-      background: #15213B;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 8px;
+    .horiz-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 12px;
     }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--emerald), var(--cyan));
-      border-radius: 999px;
-      transition: width 0.3s ease;
-    }
-
-    /* Chips & Lists */
-    .chips-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 10px; }
-    .chips-scroll::-webkit-scrollbar { display: none; }
-    .chip {
+    .horiz-scroll::-webkit-scrollbar { display: none; }
+    .pill-chip {
       white-space: nowrap;
       padding: 8px 14px;
       border-radius: 999px;
-      background: #0D1629;
-      border: 1px solid #1E293B;
-      color: var(--text-muted);
-      font-size: 12.5px;
-      font-weight: 700;
+      background: #0E172A;
+      border: 1px solid var(--border);
+      color: #CBD5E1;
+      font-size: 12px;
+      font-weight: 800;
       cursor: pointer;
     }
-    .chip.active {
+    .pill-chip.active {
       background: var(--cyan);
       color: #020617;
       border-color: var(--cyan);
     }
 
-    /* 24h Grid Blocks */
-    .grid-24h {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .hour-slot {
-      background: #0A1120;
-      border: 1px solid #1E293B;
-      border-radius: 10px;
-      padding: 8px 4px;
-      text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748B;
-      cursor: pointer;
-    }
-    .hour-slot.filled {
-      color: #020617;
-      font-weight: 800;
-      border-color: transparent;
-    }
-
-    /* Member Card */
-    .member-card {
+    /* Hero Timer Layout */
+    .hero-grid {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      background: #091120;
-      border: 1px solid #1E293B;
-      border-radius: 20px;
-      padding: 13px 14px;
+      gap: 10px;
+    }
+    .hero-left { flex: 1.15; min-width: 0; }
+    .hero-right {
+      flex: 0.95;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .hero-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.9px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .hero-time-big {
+      font-size: 44px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin: 4px 0;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 2px 18px rgba(0, 240, 255, 0.3);
+    }
+    .hero-goal-sub {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--emerald);
       margin-bottom: 10px;
     }
-    .avatar-circle {
-      width: 44px; height: 44px;
-      border-radius: 50%;
-      background: var(--cyan);
-      color: #020617;
+
+    #planetCanvas {
+      width: 156px;
+      height: 156px;
+      display: block;
+    }
+    .planet-stage-pill {
+      margin-top: 4px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: #0D182C;
+      border: 1px solid rgba(0, 240, 255, 0.45);
+      color: var(--cyan);
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    /* Live Sine-Wave Canvas Strip */
+    .wave-strip-box {
+      margin: 14px 0 12px;
+      background: rgba(6, 11, 24, 0.75);
+      border: 1px solid #172542;
+      border-radius: 18px;
+      padding: 8px 12px;
+    }
+    .wave-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    #waveCanvas {
+      width: 100%;
+      height: 40px;
+      display: block;
+    }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 10px; width: 100%; }
+    .btn-neon {
+      flex: 1.4;
+      background: linear-gradient(135deg, var(--emerald), #00D4B2);
+      color: #022C22;
+      border: none;
+      border-radius: 16px;
+      padding: 13px 14px;
+      font-size: 14px;
       font-weight: 900;
-      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: transform 0.12s ease;
+    }
+    .btn-neon:active { transform: scale(0.96); }
+    .btn-glass {
+      flex: 1;
+      background: #131E36;
+      color: #E2E8F0;
+      border: 1px solid #263554;
+      border-radius: 16px;
+      padding: 13px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Weekly Frequency Dock (Equal to One UI Widget) */
+    .week-dock {
+      background: #0B1325;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 14px;
+    }
+    .week-dock-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .week-days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+    .day-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .day-capsule {
+      width: 100%;
+      max-width: 38px;
+      height: 36px;
+      border-radius: 12px;
+      background: #131E36;
+      border: 1.5px solid #24324F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: #475569;
+    }
+    .day-capsule.done {
+      background: linear-gradient(135deg, var(--emerald), var(--cyan));
+      border-color: var(--cyan);
+      color: #022C22;
+    }
+    .day-capsule.today {
+      border-color: var(--orange);
+      border-width: 2px;
+      color: var(--orange);
+      background: rgba(255, 107, 44, 0.16);
+    }
+    .day-lbl {
+      font-size: 10px;
+      font-weight: 800;
+      color: #64748B;
+    }
+    .day-lbl.today { color: var(--orange); }
+
+    /* 24h Planner Grid */
+    .grid-24h {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin-top: 12px;
+    }
+    .slot-24h {
+      background: #091120;
+      border: 1px solid #1E293B;
+      border-radius: 12px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .slot-24h:active { transform: scale(0.95); }
+    .slot-hour { font-size: 11px; font-weight: 900; color: #94A3B8; }
+    .slot-subj {
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #475569;
+    }
+
+    /* Group Member Cards */
+    .member-row {
+      background: rgba(11, 17, 32, 0.94);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 13px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .member-row.me { border: 1.5px solid rgba(255, 107, 44, 0.75); }
+    .avatar-orb {
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 15px;
+      color: #020617;
       flex-shrink: 0;
     }
 
-    /* Bottom Navigation */
-    .bottom-nav {
+    /* Bottom Navigation (5 Tabs) */
+    .bottom-dock {
       position: fixed;
       bottom: calc(10px + env(safe-area-inset-bottom));
-      left: 12px; right: 12px;
-      max-width: 540px;
+      left: 10px; right: 10px;
+      max-width: 560px;
       margin: 0 auto;
-      background: rgba(8, 14, 28, 0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(8, 14, 28, 0.94);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
       border: 1px solid #1E293B;
       border-radius: 28px;
       padding: 6px;
       display: flex;
-      justify-content: space-around;
-      z-index: 50;
+      justify-content: space-between;
+      z-index: 70;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
     }
-    .nav-item {
+    .nav-btn {
       flex: 1;
-      text-align: center;
-      padding: 8px 4px;
-      border-radius: 22px;
-      color: #64748B;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
       background: transparent;
+      border: none;
+      color: #64748B;
+      padding: 7px 2px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .nav-item.active {
+    .nav-btn.active {
       background: rgba(0, 240, 255, 0.14);
       color: var(--cyan);
     }
-    .nav-emoji { display: block; font-size: 18px; margin-bottom: 2px; }
+    .nav-ico { display: block; font-size: 17px; margin-bottom: 2px; }
 
-    /* Modal */
-    .modal-backdrop {
+    /* Universal Cosmic Glass Modal */
+    .modal-overlay {
       display: none;
-      position: fixed; inset: 0;
-      background: rgba(2, 6, 23, 0.82);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-      align-items: center; justify-content: center;
-      padding: 18px;
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(2, 6, 18, 0.84);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
     }
-    .modal-backdrop.open { display: flex; }
-    .modal-box {
-      width: 100%; max-width: 440px;
-      background: linear-gradient(180deg, #0B1528 0%, #050912 100%);
-      border: 1.5px solid rgba(0, 240, 255, 0.55);
-      border-radius: 28px;
-      padding: 20px;
-      max-height: 85dvh;
-      overflow-y: auto;
-    }
-    input, textarea {
+    .modal-overlay.open { display: flex; }
+    .cosmic-modal {
       width: 100%;
-      background: #0A1222;
+      max-width: 460px;
+      max-height: 88dvh;
+      overflow-y: auto;
+      background: linear-gradient(180deg, #0B1528 0%, #070C18 60%, #050912 100%);
+      border: 1.5px solid rgba(0, 240, 255, 0.6);
+      border-radius: 30px;
+      padding: 20px;
+      position: relative;
+      animation: modalPop 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.88); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    input, textarea, select {
+      width: 100%;
+      background: #091120;
       border: 1px solid #1E293B;
       color: #FFF;
-      border-radius: 12px;
-      padding: 11px 12px;
-      font-size: 14px;
-      margin-top: 6px;
+      border-radius: 14px;
+      padding: 11px 13px;
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-top: 5px;
       margin-bottom: 12px;
       outline: none;
     }
+    input:focus, textarea:focus, select:focus { border-color: var(--cyan); }
   </style>
 </head>
 <body>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <div class="brand">🚀 Organizancia <span>Estudancia</span></div>
+  <canvas id="starfieldBg"></canvas>
+
+  <!-- FLOATING TOP BAR -->
+  <header class="floating-topbar">
+    <div class="brand-row">
+      <span>🚀 Organizancia</span>
+      <span class="brand-accent">Estudancia</span>
+    </div>
     <div class="top-actions">
-      <button class="icon-pill" onclick="openModal('kitsModal')">🎒 Kits</button>
-      <button class="icon-pill" onclick="openModal('iosInstallModal')">📲 Instalar iOS</button>
-      <button class="icon-pill" onclick="openModal('feedbackModal')">💬</button>
+      <button class="top-icon-btn" onclick="openModal('tutorialModal')" title="Tutorial">ℹ️</button>
+      <button class="top-icon-btn" onclick="openModal('kitsModal')" title="Kits de Estudo">🎒 Kits</button>
+      <button class="top-icon-btn" onclick="openModal('feedbackModal')" title="Feedback">💬</button>
+      <button class="top-icon-btn status-pill-active" id="topStatusPill" onclick="switchTab('foco', document.querySelector('.nav-btn'))">⚡ Focar</button>
     </div>
   </header>
 
   <main class="container">
-    <!-- ABA 1: FOCO -->
-    <section id="tab-foco" class="tab-view active">
-      <div class="glass-card orbit-box">
-        <canvas id="planetCanvas" width="420" height="420"></canvas>
-        <div class="stage-badge" id="stageLabel">🌍 Nível 1 • Órbita da Terra</div>
-        <div class="timer-display" id="timerText">00:00:00</div>
-        <div style="font-size:12px; color:#94A3B8;" id="telemetryText">Propulsão: 15.000 km/min • Tempo líquido verificado</div>
 
-        <select id="subjectSelect" class="subject-selector" onchange="onSubjectChange()"></select>
+    <!-- =====================================================================
+         ABA 1: FOCO (HERO WIDGET + ONDA SENOIDAL + SOM AMBIENTE + DOCK SEMANAL)
+         ===================================================================== -->
+    <section id="tab-foco" class="tab-screen active">
 
+      <!-- Seletor de Modo -->
+      <div class="segmented-row">
+        <button class="seg-btn active" id="modeBtn-free" onclick="setTimerMode('free')">⏱️ Cronômetro Livre</button>
+        <button class="seg-btn" id="modeBtn-pomo25" onclick="setTimerMode('pomo25')">🍅 Pomodoro 25m</button>
+        <button class="seg-btn" id="modeBtn-pomo50" onclick="setTimerMode('pomo50')">🔥 Deep 50m</button>
+      </div>
+
+      <!-- Card Hero Orbital (Idêntico ao Widget / Tela Principal do Android) -->
+      <div class="cosmic-card glow-cyan">
+        <div class="card-top-beam"></div>
+
+        <div class="hero-grid">
+          <div class="hero-left">
+            <div class="hero-label" id="timerModeSubLabel">TEMPO DE FOCO HOJE</div>
+            <div class="hero-time-big" id="mainTimerDisplay">00:00:00</div>
+            <div class="hero-goal-sub" id="heroGoalSummary">🎯 Meta 4h • 0% concluído</div>
+
+            <!-- Seletor da Matéria em Foco -->
+            <select id="focusSubjectSelect" onchange="onChangeActiveSubject()" style="margin:0; padding:9px 12px; font-size:12.5px; border-color:rgba(0,240,255,0.45); background:#111D35;"></select>
+          </div>
+
+          <div class="hero-right">
+            <canvas id="planetCanvas" width="320" height="320"></canvas>
+            <div class="planet-stage-pill" id="planetStageBadge">🌍 Nível 1 • Terra</div>
+          </div>
+        </div>
+
+        <!-- Faixa Central: Onda Senoidal Dupla Animada ao Vivo -->
+        <div class="wave-strip-box">
+          <div class="wave-header">
+            <span id="waveLeftLabel">〰️ PULSO ORBITAL AO VIVO</span>
+            <span style="color:var(--cyan);" id="waveRightTelemetry">🛰️ Sonda: 0k km</span>
+          </div>
+          <canvas id="waveCanvas" width="680" height="84"></canvas>
+        </div>
+
+        <!-- Controles do Cronômetro -->
         <div class="btn-row">
-          <button class="btn-primary" id="btnStartPause" onclick="toggleTimer()">▶ Iniciar Missão</button>
-          <button class="btn-secondary" onclick="finishSession()">✓ Concluir</button>
+          <button class="btn-neon" id="btnStartPause" onclick="toggleFocusTimer()">▶ Iniciar Missão</button>
+          <button class="btn-glass" onclick="completeFocusSession()">✓ Concluir</button>
+        </div>
+
+        <!-- Gerador de Som de Imersão (Web Audio API) -->
+        <div style="display:flex; gap:8px; margin-top:12px; align-items:center; justify-content:space-between; background:#091120; padding:10px 12px; border-radius:16px; border:1px solid #1E293B;">
+          <span style="font-size:11.5px; font-weight:800; color:#CBD5E1;">🔊 Imersão Neural:</span>
+          <div style="display:flex; gap:6px;">
+            <button class="top-icon-btn" id="soundBtn-off" style="border-color:var(--cyan); color:var(--cyan);" onclick="setAmbientSound('off')">Mudo</button>
+            <button class="top-icon-btn" id="soundBtn-brown" onclick="setAmbientSound('brown')">🪐 Ruído Marrom</button>
+            <button class="top-icon-btn" id="soundBtn-rain" onclick="setAmbientSound('rain')">🌧️ Chuva</button>
+          </div>
         </div>
       </div>
 
-      <div class="glass-card">
-        <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700;">
-          <span>🎯 Meta Diária (<span id="goalHoursLabel">4h</span>)</span>
-          <span style="color:var(--emerald);" id="todayProgressText">0h 00m (0%)</span>
+      <!-- Dock Inferior: Frequência na Semana (Idêntico ao Print da One UI) -->
+      <div class="week-dock">
+        <div class="week-dock-header">
+          <span>FREQUÊNCIA NA SEMANA</span>
+          <span style="color:var(--cyan);" id="weekActiveCountLabel">1/7 dias ativos</span>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="todayProgressBar" style="width:0%"></div>
-        </div>
+        <div class="week-days-grid" id="weekDockGrid"></div>
       </div>
     </section>
 
-    <!-- ABA 2: PLANEJADOR 24H -->
-    <section id="tab-planejador" class="tab-view">
-      <div class="glass-card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-weight:800; font-size:17px;">📅 Grade 24h Inteligente</div>
-            <div style="font-size:12px; color:#94A3B8;">Toque numa hora para pintar com a matéria ativa</div>
-          </div>
-          <button class="icon-pill" style="background:rgba(16,185,129,0.18); color:#10B981; border-color:#10B981;" onclick="quickFillHour()">⚡ +1h Rápida</button>
+    <!-- =====================================================================
+         ABA 2: PLANEJADOR (D-DAY + SELETOR 7 DIAS + GRADE 24H + TAREFAS)
+         ===================================================================== -->
+    <section id="tab-planejador" class="tab-screen">
+
+      <!-- Card Contagem Regressiva D-Day -->
+      <div class="cosmic-card" style="padding:14px 18px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, #0D1A35, #080F1E);">
+        <div>
+          <div style="font-size:10px; font-weight:800; color:var(--cyan); letter-spacing:0.8px;">⏳ MISSÃO D-DAY • CONTAGEM REGRESSIVA</div>
+          <div style="font-size:16px; font-weight:900; margin-top:2px;" id="dDayTitleLabel">ENEM / Vestibular 2026</div>
         </div>
-        <div class="grid-24h" id="grid24hContainer"></div>
+        <div style="text-align:right; cursor:pointer;" onclick="promptChangeDDay()">
+          <div style="font-size:22px; font-weight:900; color:var(--amber);" id="dDayDaysLeft">180 dias</div>
+          <div style="font-size:10px; color:var(--muted);">✏️ Alterar data</div>
+        </div>
       </div>
 
-      <div class="glass-card">
-        <div style="font-weight:800; font-size:16px; margin-bottom:8px;">📋 Tarefas & Metas do Dia</div>
+      <!-- Seletor de Dia da Semana -->
+      <div class="horiz-scroll" id="plannerDayTabs"></div>
+
+      <!-- Grade 24h com Pintura Rápida -->
+      <div class="cosmic-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-weight:900; font-size:16px;">📅 Grade 24h Inteligente</div>
+            <div style="font-size:11.5px; color:var(--muted);">Escolha a matéria abaixo e toque nos horários</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="top-icon-btn" style="background:rgba(16,185,129,0.16); color:var(--emerald); border-color:var(--emerald);" onclick="quickPaintGrid(1)">⚡ +30m / 1h</button>
+            <button class="top-icon-btn" style="background:rgba(0,240,255,0.14); color:var(--cyan); border-color:var(--cyan);" onclick="quickCloseCurrentHour()">🕒 Hora Atual</button>
+          </div>
+        </div>
+
+        <select id="plannerBrushSubject" style="margin-top:10px; margin-bottom:4px; background:#111D35;"></select>
+
+        <div class="grid-24h" id="planner24hGrid"></div>
+      </div>
+
+      <!-- Checklist de Tarefas Prioritárias -->
+      <div class="cosmic-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-weight:900; font-size:16px;">📋 Tarefas & Metas do Dia</div>
+          <span style="font-size:12px; font-weight:800; color:var(--emerald);" id="tasksProgressBadge">0/0 concluídas</span>
+        </div>
         <div style="display:flex; gap:8px;">
-          <input type="text" id="newTaskInput" placeholder="Nova tarefa (ex: Resolver 20 questões de Física)..." style="margin:0;" />
-          <button class="btn-primary" style="flex:0 0 84px; padding:10px;" onclick="addTask()">+ Add</button>
+          <input type="text" id="newTaskInput" placeholder="Adicionar meta ou lista de questões..." style="margin:0;" />
+          <button class="btn-neon" style="flex:0 0 88px; padding:10px;" onclick="addPlannerTask()">+ Criar</button>
         </div>
-        <div id="tasksListContainer" style="margin-top:12px;"></div>
+        <div id="plannerTasksList" style="margin-top:12px;"></div>
       </div>
     </section>
 
-    <!-- ABA 3: GRUPOS AO VIVO (MESMO FIREBASE DO ANDROID!) -->
-    <section id="tab-grupos" class="tab-view">
-      <div class="chips-scroll">
-        <button class="chip active" id="roomChip-ENEM-2026" onclick="switchRoom('ENEM-2026', 'Foco Total — Vestibulares & ENEM')">🎓 Foco Total • ENEM-2026</button>
-        <button class="chip" id="roomChip-ITA-AERO" onclick="switchRoom('ITA-AERO', 'Turma ITA / IME & Medicina')">🚀 Turma ITA / IME • ITA-AERO</button>
-      </div>
+    <!-- =====================================================================
+         ABA 3: GRUPOS AO VIVO (FIREBASE + CRIAR SALA + GERADOR DE CARD 1080x1920)
+         ===================================================================== -->
+    <section id="tab-grupos" class="tab-screen">
 
-      <div class="glass-card">
+      <!-- Seletor Horizontal de Salas + Criar/Entrar -->
+      <div class="horiz-scroll" id="roomsChipContainer"></div>
+
+      <!-- Card Principal da Sala -->
+      <div class="cosmic-card glow-emerald">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-size:11px; color:var(--cyan); font-weight:800;">SALA AO VIVO • SINCRONIZADA COM ANDROID</div>
-            <div style="font-size:17px; font-weight:800; margin-top:2px;" id="activeRoomTitle">Foco Total — Vestibulares & ENEM</div>
-          </div>
-          <button class="icon-pill" onclick="openModal('profileModal')">✏️ Nome</button>
+          <span style="font-size:11.5px; color:var(--muted); font-weight:700;" id="groupCategoryHeader">Vestibulares & ENEM • Sincronizado em Tempo Real</span>
+          <span style="background:#06281E; border:1px solid rgba(16,185,129,0.5); color:var(--emerald); padding:3px 10px; border-radius:999px; font-size:11px; font-weight:800;" id="studyingNowBadge">🟢 1 estudando</span>
         </div>
-        <div style="margin-top:10px; font-size:12px; color:#94A3B8;">
-          Seu perfil: <strong style="color:#FFF;" id="displayUserName">Estudante iOS</strong> • Código: <strong style="color:var(--cyan);" id="displayRoomCode">ENEM-2026</strong>
+
+        <div style="font-size:19px; font-weight:900; margin:8px 0 12px;" id="groupTitleHeader">Foco Total — Vestibulares & ENEM</div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:800; color:#CBD5E1; margin-bottom:6px;">
+          <span id="groupWeeklyGoalText">Meta Semanal do Esquadrão: 0h / 200h</span>
+          <span style="color:var(--cyan);" id="groupWeeklyGoalPct">0%</span>
+        </div>
+        <div style="height:8px; background:#1E293B; border-radius:999px; overflow:hidden; margin-bottom:14px;">
+          <div id="groupWeeklyBar" style="height:100%; width:4%; background:linear-gradient(90deg, var(--emerald), var(--cyan)); border-radius:999px;"></div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn-neon" style="flex:1.3; padding:11px;" onclick="switchTab('foco', document.querySelector('.nav-btn'))">▶ Estudar Agora</button>
+          <button class="btn-glass" style="flex:0.8; padding:11px;" onclick="openModal('profileModal')">✏️ Nome</button>
+          <button class="btn-glass" style="flex:1; padding:11px; border-color:rgba(56,189,248,0.6); color:#38BDF8;" onclick="openStoryCardGenerator()">📸 Status</button>
         </div>
       </div>
 
-      <div id="membersListContainer">
-        <div style="text-align:center; color:#94A3B8; padding:20px; font-size:13px;">Conectando ao esquadrão ao vivo...</div>
+      <!-- Sub-Abas do Ranking -->
+      <div class="segmented-row">
+        <button class="seg-btn active" id="rankTab-live" onclick="setRankingTab('live')">Ao Vivo 🟢</button>
+        <button class="seg-btn" id="rankTab-today" onclick="setRankingTab('today')">Ranking Hoje 🏆</button>
+        <button class="seg-btn" id="rankTab-week" onclick="setRankingTab('week')">Semanal 📅</button>
+      </div>
+
+      <!-- Lista de Membros do Firebase -->
+      <div id="groupMembersList"></div>
+
+      <!-- Banner Inferior de Gerar Card de Status -->
+      <div class="cosmic-card" style="display:flex; justify-content:space-between; align-items:center; padding:14px 16px;">
+        <div>
+          <div style="font-weight:900; font-size:13.5px;">📸 Postar Ranking nos Status / Stories</div>
+          <div style="font-size:11px; color:var(--muted);">Gera uma imagem 1080x1920 com seu ranking e frase motivacional</div>
+        </div>
+        <button class="top-icon-btn status-pill-active" style="padding:8px 14px;" onclick="openStoryCardGenerator()">Gerar Card</button>
       </div>
     </section>
 
-    <!-- ABA 4: MATÉRIAS & ESTATÍSTICAS -->
-    <section id="tab-materias" class="tab-view">
-      <div class="glass-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <div>
-            <div style="font-weight:800; font-size:17px;">📚 Matérias & Rendimento</div>
-            <div style="font-size:12px; color:#94A3B8;">Divisão proporcional à meta de <span id="goalSummaryLabel">4h</span>/dia</div>
-          </div>
-          <button class="icon-pill" onclick="openModal('kitsModal')">🎒 Trocar Kit</button>
+    <!-- =====================================================================
+         ABA 4: ESTATÍSTICAS (BARRAS + DONUT POR MATÉRIA + HEATMAP)
+         ===================================================================== -->
+    <section id="tab-estatisticas" class="tab-screen">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+        <div class="cosmic-card" style="margin:0; padding:14px;">
+          <div style="font-size:10.5px; font-weight:800; color:var(--muted);">TEMPO LÍQUIDO HOJE</div>
+          <div style="font-size:24px; font-weight:900; color:var(--cyan); margin-top:4px;" id="statTodayTotal">0h 00m</div>
+          <div style="font-size:11px; color:var(--emerald); margin-top:2px;">✓ Auditado pelo cronômetro</div>
         </div>
-        <div id="subjectsListContainer"></div>
+        <div class="cosmic-card" style="margin:0; padding:14px;">
+          <div style="font-size:10.5px; font-weight:800; color:var(--muted);">ACUMULADO NA SEMANA</div>
+          <div style="font-size:24px; font-weight:900; color:var(--emerald); margin-top:4px;" id="statWeekTotal">0h 00m</div>
+          <div style="font-size:11px; color:var(--muted); margin-top:2px;" id="statStreakLabel">🔥 Constância ativa</div>
+        </div>
+      </div>
+
+      <!-- Gráfico de Barras da Semana -->
+      <div class="cosmic-card">
+        <div style="font-weight:900; font-size:15.5px; margin-bottom:4px;">📊 Rendimento Semanal (SEG a DOM)</div>
+        <div style="font-size:11.5px; color:var(--muted); margin-bottom:12px;">Horas estudadas em cada dia da semana</div>
+        <canvas id="weeklyBarChart" width="520" height="200" style="width:100%; height:160px; display:block;"></canvas>
+      </div>
+
+      <!-- Gráfico Donut de Distribuição por Matéria -->
+      <div class="cosmic-card">
+        <div style="font-weight:900; font-size:15.5px; margin-bottom:10px;">🍩 Distribuição por Disciplina</div>
+        <div style="display:flex; align-items:center; gap:14px;">
+          <canvas id="subjectDonutChart" width="240" height="240" style="width:130px; height:130px; flex-shrink:0;"></canvas>
+          <div id="donutLegendBox" style="flex:1; font-size:12px;"></div>
+        </div>
       </div>
     </section>
+
+    <!-- =====================================================================
+         ABA 5: MATÉRIAS & EDITAL (TÓPICOS + ADICIONAR TEMPO + CRIAR MATÉRIA)
+         ===================================================================== -->
+    <section id="tab-materias" class="tab-screen">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div>
+          <div style="font-weight:900; font-size:18px;">📚 Minhas Matérias & Edital</div>
+          <div style="font-size:11.5px; color:var(--muted);">Metas proporcionais a <span id="subjTabGoalLabel">4h</span>/dia</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="top-icon-btn" onclick="openModal('kitsModal')">🎒 Kits</button>
+          <button class="top-icon-btn status-pill-active" onclick="openModal('newSubjectModal')">+ Matéria</button>
+        </div>
+      </div>
+
+      <div id="subjectsFullList"></div>
+    </section>
+
   </main>
 
-  <!-- BARRA INFERIOR -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('foco', this)"><span class="nav-emoji">⏱️</span>Foco</button>
-    <button class="nav-item" onclick="switchTab('planejador', this)"><span class="nav-emoji">📅</span>Planejador</button>
-    <button class="nav-item" onclick="switchTab('grupos', this)"><span class="nav-emoji">👥</span>Grupos</button>
-    <button class="nav-item" onclick="switchTab('materias', this)"><span class="nav-emoji">📚</span>Matérias</button>
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR DE 5 ABAS (IGUAL AO ANDROID) -->
+  <nav class="bottom-dock">
+    <button class="nav-btn active" onclick="switchTab('foco', this)"><span class="nav-ico">⏱️</span>Foco</button>
+    <button class="nav-btn" onclick="switchTab('planejador', this)"><span class="nav-ico">📅</span>Planejador</button>
+    <button class="nav-btn" onclick="switchTab('grupos', this)"><span class="nav-ico">👥</span>Grupos</button>
+    <button class="nav-btn" onclick="switchTab('estatisticas', this)"><span class="nav-ico">📊</span>Estatísticas</button>
+    <button class="nav-btn" onclick="switchTab('materias', this)"><span class="nav-ico">📚</span>Matérias</button>
   </nav>
 
-  <!-- MODAL: INSTALAR NO IPHONE (PWA) -->
-  <div class="modal-backdrop" id="iosInstallModal">
-    <div class="modal-box">
-      <div style="font-weight:800; font-size:18px; margin-bottom:8px;">📲 Instalar no iPhone / iPad</div>
-      <p style="font-size:13px; color:#94A3B8; line-height:1.5;">
-        Este Web App funciona como aplicativo nativo no iOS, sem precisar de App Store e conectado nas mesmas salas do Android:
-      </p>
-      <div style="background:#0A1222; border:1px solid #1E293B; border-radius:16px; padding:14px; font-size:13px; line-height:1.6;">
-        1. Abra este link no navegador <strong>Safari</strong>.<br/>
-        2. Toque no ícone de <strong>Compartilhar (⬆️)</strong> na barra inferior.<br/>
-        3. Role para baixo e toque em <strong>"Adicionar à Tela de Início"</strong>.<br/>
-        4. Pronto! Ele abre em tela cheia com ícone próprio.
+  <!-- =======================================================================
+       MODAL 1: TUTORIAL INTERATIVO 60 FPS ("Estude e Viaje pelo Sistema Solar")
+       ======================================================================= -->
+  <div class="modal-overlay" id="tutorialModal">
+    <div class="cosmic-modal">
+      <div class="card-top-beam"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:10px; font-weight:900; color:var(--cyan); background:rgba(0,240,255,0.14); padding:4px 10px; border-radius:999px; border:1px solid rgba(0,240,255,0.4);" id="tutBadge">MÓDULO 01 • MOTOR ESPACIAL 3D</span>
+        <button class="top-icon-btn" onclick="closeModal('tutorialModal')">Pular ✕</button>
       </div>
-      <button class="btn-primary" style="width:100%; margin-top:14px;" onclick="closeModal('iosInstallModal')">Entendi 🚀</button>
-    </div>
-  </div>
 
-  <!-- MODAL: KITS PRONTOS -->
-  <div class="modal-backdrop" id="kitsModal">
-    <div class="modal-box">
-      <div style="font-weight:800; font-size:18px; margin-bottom:4px;">🎒 Kits de Estudo & Meta Diária</div>
-      <p style="font-size:12px; color:#94A3B8; margin-bottom:12px;">Escolha sua meta diária e aplique um kit pronto:</p>
-      <div class="chips-scroll">
-        <button class="chip" onclick="setDailyGoal(3)">3h/dia</button>
-        <button class="chip active" onclick="setDailyGoal(4)">4h/dia</button>
-        <button class="chip" onclick="setDailyGoal(5)">5h/dia</button>
-        <button class="chip" onclick="setDailyGoal(6)">6h/dia</button>
-        <button class="chip" onclick="setDailyGoal(8)">8h/dia</button>
+      <div style="background:#040812; border:1px solid #1E293B; border-radius:22px; margin:12px 0; padding:14px; text-align:center;">
+        <canvas id="tutorialOrbitCanvas" width="320" height="200" style="width:100%; height:140px; display:block;"></canvas>
       </div>
-      <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
-        <button class="btn-secondary" style="text-align:left;" onclick="applyKit('enem')">🎓 <strong>ENEM & Vestibulares</strong><br/><span style="font-size:11px; color:#94A3B8;">Redação, Matemática, Natureza, Linguagens, Humanas</span></button>
-        <button class="btn-secondary" style="text-align:left;" onclick="applyKit('ita')">🚀 <strong>ITA / IME & Engenharia Militar</strong><br/><span style="font-size:11px; color:#94A3B8;">Mat. ITA, Física ITA, Química, Redação, Inglês</span></button>
-        <button class="btn-secondary" style="text-align:left;" onclick="applyKit('med')">🧬 <strong>Medicina (FUVEST / UNICAMP / ENEM)</strong><br/><span style="font-size:11px; color:#94A3B8;">Biologia, Química, Física, Redação, Mat/Humanas</span></button>
-      </div>
-      <button class="btn-primary" style="width:100%; margin-top:14px;" onclick="closeModal('kitsModal')">Fechar</button>
-    </div>
-  </div>
 
-  <!-- MODAL: PERFIL NOS GRUPOS -->
-  <div class="modal-backdrop" id="profileModal">
-    <div class="modal-box">
-      <div style="font-weight:800; font-size:18px; margin-bottom:8px;">✏️ Seu Perfil nos Grupos</div>
-      <label style="font-size:12px; color:#94A3B8;">Seu Nome ou Apelido</label>
-      <input type="text" id="inputUserName" placeholder="Ex: Pedro • ITA" maxlength="24" />
-      <label style="font-size:12px; color:#94A3B8;">Sua Frase / Meta</label>
-      <input type="text" id="inputUserStatus" placeholder="Ex: 🚀 Rumo à aprovação!" maxlength="50" />
+      <div style="font-size:19px; font-weight:900; text-align:center; margin-bottom:6px;" id="tutTitle">Estude e Viaje pelo Sistema Solar</div>
+      <div style="font-size:12.5px; color:var(--muted); text-align:center; line-height:1.5; margin-bottom:14px;" id="tutDesc">
+        Cada minuto de foco impulsiona sua sonda espacial em 60fps — saia da órbita da Terra, atravesse os anéis de Saturno e alcance o espaço interestelar.
+      </div>
+
+      <div id="tutBulletsBox" style="display:flex; flex-direction:column; gap:7px; margin-bottom:16px;"></div>
+
       <div class="btn-row">
-        <button class="btn-secondary" onclick="closeModal('profileModal')">Cancelar</button>
-        <button class="btn-primary" onclick="saveProfile()">Salvar 🚀</button>
+        <button class="btn-glass" onclick="prevTutorialSlide()">Anterior</button>
+        <button class="btn-neon" id="tutNextBtn" onclick="nextTutorialSlide()">Próximo ➔</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: CENTRAL DE FEEDBACK (SALVA NO MESMO FIREBASE!) -->
-  <div class="modal-backdrop" id="feedbackModal">
-    <div class="modal-box">
-      <div style="font-weight:800; font-size:18px; margin-bottom:4px;">💬 Central de Feedback</div>
-      <p style="font-size:12px; color:#94A3B8; margin-bottom:10px;">Sua sugestão ou bug vai direto para o banco de dados do desenvolvedor.</p>
-      <textarea id="feedbackMsg" rows="4" placeholder="Escreva sua ideia, elogio ou bug..."></textarea>
+  <!-- =======================================================================
+       MODAL 2: GERADOR DE CARD 1080x1920 PARA STATUS / STORIES
+       ======================================================================= -->
+  <div class="modal-overlay" id="storyCardModal">
+    <div class="cosmic-modal">
+      <div class="card-top-beam"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-weight:900; font-size:16px;">📸 Card HD para Status / Stories</span>
+        <button class="top-icon-btn" onclick="closeModal('storyCardModal')">✕</button>
+      </div>
+
+      <canvas id="storyGeneratorCanvas" width="1080" height="1920" style="width:100%; max-height:390px; object-fit:contain; border-radius:18px; border:1px solid #1E293B; background:#040814; display:block; margin:0 auto 12px;"></canvas>
+
+      <button class="btn-glass" style="width:100%; margin-bottom:10px; border-color:rgba(56,189,248,0.5); color:#38BDF8;" onclick="rerollStoryQuote()">🔄 Sortear Outra Frase Motivacional</button>
+
       <div class="btn-row">
-        <button class="btn-secondary" onclick="closeModal('feedbackModal')">Cancelar</button>
-        <button class="btn-primary" onclick="sendFeedback()">Enviar 🚀</button>
+        <button class="btn-glass" onclick="closeModal('storyCardModal')">Fechar</button>
+        <button class="btn-neon" onclick="shareOrDownloadStoryCard()">📤 Compartilhar Imagem</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 3: KITS DE ESTUDO (COSMIC GLASS REDESIGN)
+       ======================================================================= -->
+  <div class="modal-overlay" id="kitsModal">
+    <div class="cosmic-modal">
+      <div class="card-top-beam"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <span style="font-weight:900; font-size:18px;">🎒 Escolha seu Kit de Estudo</span>
+        <button class="top-icon-btn" onclick="closeModal('kitsModal')">✕</button>
+      </div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:10px;">Ajusta automaticamente as matérias, cores e tópicos do edital para a sua meta diária:</div>
+
+      <div class="segmented-row" id="kitGoalHoursRow">
+        <button class="seg-btn" onclick="selectDailyGoalHours(3, this)">3h/dia</button>
+        <button class="seg-btn active" onclick="selectDailyGoalHours(4, this)">4h/dia</button>
+        <button class="seg-btn" onclick="selectDailyGoalHours(5, this)">5h/dia</button>
+        <button class="seg-btn" onclick="selectDailyGoalHours(6, this)">6h/dia</button>
+        <button class="seg-btn" onclick="selectDailyGoalHours(8, this)">8h/dia</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="cosmic-card" style="margin:0; padding:14px; cursor:pointer; border-color:var(--cyan);" onclick="applyStudyKit('enem')">
+          <div style="font-size:10px; font-weight:900; color:var(--cyan);">🔥 MAIS POPULAR • 5 ÁREAS OFICIAIS</div>
+          <div style="font-size:15.5px; font-weight:900; margin:2px 0;">🎓 ENEM & Vestibulares</div>
+          <div style="font-size:11.5px; color:var(--muted);">Redação 900+, Matemática, Natureza, Linguagens e Humanas</div>
+        </div>
+
+        <div class="cosmic-card" style="margin:0; padding:14px; cursor:pointer; border-color:var(--purple);" onclick="applyStudyKit('ita')">
+          <div style="font-size:10px; font-weight:900; color:var(--purple);">🚀 ALTA PERFORMANCE • EXATAS AVANÇADAS</div>
+          <div style="font-size:15.5px; font-weight:900; margin:2px 0;">✈️ ITA / IME & Engenharia Militar</div>
+          <div style="font-size:11.5px; color:var(--muted);">Matemática ITA, Física Aprofundada, Química, Redação e Inglês</div>
+        </div>
+
+        <div class="cosmic-card" style="margin:0; padding:14px; cursor:pointer; border-color:var(--emerald);" onclick="applyStudyKit('med')">
+          <div style="font-size:10px; font-weight:900; color:var(--emerald);">🩺 BIOMÉDICAS & PAULISTAS</div>
+          <div style="font-size:15.5px; font-weight:900; margin:2px 0;">🧬 Medicina (FUVEST / UNICAMP / ENEM)</div>
+          <div style="font-size:11.5px; color:var(--muted);">Biologia, Química, Física, Redação Dissertativa e Matemática</div>
+        </div>
+
+        <div class="cosmic-card" style="margin:0; padding:14px; cursor:pointer; border-color:var(--amber);" onclick="applyStudyKit('concursos')">
+          <div style="font-size:10px; font-weight:900; color:var(--amber);">⚖️ EDITAL ESTRUTURADO</div>
+          <div style="font-size:15.5px; font-weight:900; margin:2px 0;">🏛️ Concursos Públicos & Carreiras</div>
+          <div style="font-size:11.5px; color:var(--muted);">Português, Direito Constitucional/Adm, Específicos e RLM/TI</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 4: PERFIL E SALAS NOS GRUPOS
+       ======================================================================= -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="cosmic-modal">
+      <div class="card-top-beam"></div>
+      <div style="font-weight:900; font-size:18px; margin-bottom:10px;">✏️ Seu Perfil & Sala nos Grupos</div>
+      <label style="font-size:12px; color:var(--muted);">Seu Nome ou Apelido no Ranking</label>
+      <input type="text" id="inputProfileName" placeholder="Ex: Pedro • ITA" maxlength="24" />
+      <label style="font-size:12px; color:var(--muted);">Sua Frase de Status / Meta</label>
+      <input type="text" id="inputProfileStatus" placeholder="Ex: 🚀 Rumo à aprovação!" maxlength="55" />
+      <label style="font-size:12px; color:var(--muted);">Entrar ou Criar Código de Sala (Opcional)</label>
+      <input type="text" id="inputCustomRoomCode" placeholder="Ex: ENEM-2026 ou ITA-AERO" maxlength="14" />
+      <div class="btn-row">
+        <button class="btn-glass" onclick="closeModal('profileModal')">Cancelar</button>
+        <button class="btn-neon" onclick="saveGroupProfile()">Salvar Perfil 🚀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 5: NOVA MATÉRIA
+       ======================================================================= -->
+  <div class="modal-overlay" id="newSubjectModal">
+    <div class="cosmic-modal">
+      <div class="card-top-beam"></div>
+      <div style="font-weight:900; font-size:18px; margin-bottom:10px;">📚 Criar Nova Matéria</div>
+      <label style="font-size:12px; color:var(--muted);">Nome da Disciplina</label>
+      <input type="text" id="newSubjName" placeholder="Ex: Física Moderna" />
+      <label style="font-size:12px; color:var(--muted);">Meta Diária (Minutos)</label>
+      <input type="number" id="newSubjGoalMins" value="60" min="15" max="360" />
+      <div class="btn-row">
+        <button class="btn-glass" onclick="closeModal('newSubjectModal')">Cancelar</button>
+        <button class="btn-neon" onclick="createNewSubject()">Adicionar ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 6: CENTRAL DE FEEDBACK (1-5 ESTRELAS -> FIREBASE)
+       ======================================================================= -->
+  <div class="modal-overlay" id="feedbackModal">
+    <div class="cosmic-modal">
+      <div class="card-top-beam"></div>
+      <div style="font-weight:900; font-size:18px; margin-bottom:4px;">🛰️ Central de Feedback</div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:12px;">Cai direto no banco de dados do desenvolvedor em tempo real.</div>
+
+      <div style="display:flex; justify-content:center; gap:10px; font-size:26px; margin-bottom:12px;" id="starRatingRow">
+        <span onclick="setFeedbackStars(1)" style="cursor:pointer;">⭐</span>
+        <span onclick="setFeedbackStars(2)" style="cursor:pointer;">⭐</span>
+        <span onclick="setFeedbackStars(3)" style="cursor:pointer;">⭐</span>
+        <span onclick="setFeedbackStars(4)" style="cursor:pointer;">⭐</span>
+        <span onclick="setFeedbackStars(5)" style="cursor:pointer;">⭐</span>
+      </div>
+
+      <select id="feedbackCategory">
+        <option value="💡 Sugestão / Ideia">💡 Sugestão / Ideia</option>
+        <option value="🐞 Reportar Bug">🐞 Reportar Bug</option>
+        <option value="🎨 Design & Visual">🎨 Design & Visual</option>
+        <option value="⭐ Elogio">⭐ Elogio</option>
+      </select>
+
+      <textarea id="feedbackText" rows="3" placeholder="Descreva sua ideia, sugestão ou bug..."></textarea>
+      <input type="text" id="feedbackContact" placeholder="Seu @Instagram ou WhatsApp (Opcional)" />
+
+      <div class="btn-row">
+        <button class="btn-glass" onclick="closeModal('feedbackModal')">Cancelar</button>
+        <button class="btn-neon" onclick="submitCloudFeedback()">Enviar Feedback 🚀</button>
       </div>
     </div>
   </div>
 
   <script>
     const FIREBASE_URL = "https://organizancia-estudancia-default-rtdb.firebaseio.com";
+    const QUOTES = [
+      "“A disciplina é a ponte entre as suas metas e a sua aprovação.” — Jim Rohn",
+      "“Enquanto muitos descansam, quem tem um propósito constrói o próprio futuro.”",
+      "“No que diz respeito ao empenho e à dedicação, não existe meio-termo.” — Ayrton Senna",
+      "“O sucesso é a soma de pequenos esforços repetidos dia após dia.”",
+      "“A sorte é o que acontece quando a preparação encontra a oportunidade.” — Sêneca",
+      "“Grandes conquistas exigem horas silenciosas de foco que ninguém vê.”",
+      "“Um dia de foco de cada vez até o seu nome sair na lista dos aprovados.”"
+    ];
 
-    // Estado persistido no navegador/iPhone
-    let appState = JSON.parse(localStorage.getItem("estudancia_pwa_state") || "null") || {
-      userId: "ios_" + Math.random().toString(36).substring(2, 10),
-      userName: "Estudante iOS",
-      userStatus: "🚀 Rumo à aprovação!",
-      dailyGoalHours: 4,
-      verifiedSecondsToday: 0,
-      lastDate: new Date().toISOString().slice(0, 10),
-      activeRoomCode: "ENEM-2026",
-      activeRoomTitle: "Foco Total — Vestibulares & ENEM",
-      selectedSubjectIdx: 0,
-      subjects: [
-        { name: "Redação ENEM", weight: 0.20, color: "#00F0FF", studiedMins: 0 },
-        { name: "Matemática & Suas Tecnologias", weight: 0.25, color: "#10B981", studiedMins: 0 },
-        { name: "Ciências da Natureza", weight: 0.25, color: "#A855F7", studiedMins: 0 },
-        { name: "Linguagens & Códigos", weight: 0.15, color: "#F43F5E", studiedMins: 0 },
-        { name: "Ciências Humanas", weight: 0.15, color: "#F59E0B", studiedMins: 0 }
-      ],
-      grid24h: {},
-      tasks: [
-        { text: "Revisar tópicos prioritários do dia", done: false }
-      ]
+    const KITS_DATA = {
+      enem: {
+        dDay: "ENEM 2026",
+        subjects: [
+          { name: "Redação ENEM", weight: 0.20, color: "#00F0FF", studiedMins: 0, topics: ["Estrutura Dissertativa", "Repertório Coringa", "Proposta de Intervenção"] },
+          { name: "Matemática & Suas Tecnologias", weight: 0.25, color: "#10B981", studiedMins: 0, topics: ["Funções & Logaritmos", "Geometria Plana e Espacial", "Probabilidade & Estatística"] },
+          { name: "Ciências da Natureza", weight: 0.25, color: "#A855F7", studiedMins: 0, topics: ["Mecânica e Eletrodinâmica", "Estequiometria e Orgânica", "Ecologia e Genética"] },
+          { name: "Linguagens & Códigos", weight: 0.15, color: "#F43F5E", studiedMins: 0, topics: ["Interpretação de Textos", "Funções da Linguagem e Literatura"] },
+          { name: "Ciências Humanas", weight: 0.15, color: "#F59E0B", studiedMins: 0, topics: ["Brasil Império e República", "Geopolítica e Urbanização"] }
+        ]
+      },
+      ita: {
+        dDay: "Vestibular ITA",
+        subjects: [
+          { name: "Matemática ITA / IME", weight: 0.32, color: "#00F0FF", studiedMins: 0, topics: ["Complexos, Polinômios e Matrizes", "Geometria Analítica e Cônicas", "Combinatória e Trigonometria"] },
+          { name: "Física Aprofundada", weight: 0.30, color: "#10B981", studiedMins: 0, topics: ["Mecânica Clássica & Gravitação", "Termodinâmica e Óptica", "Eletromagnetismo e Moderna"] },
+          { name: "Química Geral & Orgânica", weight: 0.22, color: "#A855F7", studiedMins: 0, topics: ["Físico-Química & Eletroquímica", "Reações Orgânicas e Isomeria"] },
+          { name: "Redação & Literatura", weight: 0.08, color: "#F59E0B", studiedMins: 0, topics: ["Dissertação Reflexiva ITA", "Leituras Obrigatórias"] },
+          { name: "Inglês Técnico", weight: 0.08, color: "#F43F5E", studiedMins: 0, topics: ["Reading Comprehension", "Phrasal Verbs & Grammar"] }
+        ]
+      },
+      med: {
+        dDay: "FUVEST / Medicina",
+        subjects: [
+          { name: "Biologia & Fisiologia Humana", weight: 0.25, color: "#10B981", studiedMins: 0, topics: ["Citologia e Genética Molecular", "Fisiologia Humana e Evolução"] },
+          { name: "Química & Bioquímica", weight: 0.22, color: "#A855F7", studiedMins: 0, topics: ["Equilíbrio Químico e Soluções", "Funções e Reações Orgânicas"] },
+          { name: "Física & Mecânica", weight: 0.18, color: "#00F0FF", studiedMins: 0, topics: ["Dinâmica, Energia e Circuitos", "Termologia e Óptica"] },
+          { name: "Redação Dissertativa", weight: 0.18, color: "#F43F5E", studiedMins: 0, topics: ["Eixos Temáticos Medicina", "Obras Obrigatórias"] },
+          { name: "Matemática & Humanidades", weight: 0.17, color: "#F59E0B", studiedMins: 0, topics: ["Geometria e Funções", "História do Brasil e Geopolítica"] }
+        ]
+      },
+      concursos: {
+        dDay: "Prova do Concurso",
+        subjects: [
+          { name: "Português & Redação Oficial", weight: 0.24, color: "#00F0FF", studiedMins: 0, topics: ["Sintaxe, Crase e Regência", "Interpretação de Textos"] },
+          { name: "Direito Constitucional & Adm.", weight: 0.28, color: "#F59E0B", studiedMins: 0, topics: ["Direitos Fundamentais (Art. 5º)", "Atos, Poderes e Licitações"] },
+          { name: "Conhecimentos Específicos", weight: 0.24, color: "#10B981", studiedMins: 0, topics: ["Bloco Principal do Edital", "Bateria de Questões da Banca"] },
+          { name: "Raciocínio Lógico & TI", weight: 0.24, color: "#A855F7", studiedMins: 0, topics: ["Lógica Proposicional e Tabelas", "Segurança da Informação e Redes"] }
+        ]
+      }
     };
 
-    // Reset diário automático se virou o dia
-    const todayStr = new Date().toISOString().slice(0, 10);
-    if (appState.lastDate !== todayStr) {
-      appState.lastDate = todayStr;
-      appState.verifiedSecondsToday = 0;
-      appState.subjects.forEach(s => s.studiedMins = 0);
-      appState.grid24h = {};
+    const DAY_NAMES = ["SEG", "TER", "QUA", "QUI", "SEX", "SÁB", "DOM"];
+    function getMondayBasedDayIdx() {
+      const d = new Date().getDay();
+      return d === 0 ? 6 : d - 1;
+    }
+
+    let state = JSON.parse(localStorage.getItem("estudancia_v24_full_state") || "null") || {
+      userId: "usr_" + Math.random().toString(36).substring(2, 11),
+      userName: "Estudante",
+      userStatus: "🚀 Rumo à aprovação!",
+      dailyGoalHours: 4,
+      dDayTitle: "ENEM / Vestibular 2026",
+      dDayDate: "2026-11-15",
+      verifiedSecondsToday: 0,
+      weekSecondsByDay: [0, 0, 0, 0, 0, 0, 0],
+      lastDateYmd: new Date().toISOString().slice(0, 10),
+      selectedSubjectIdx: 0,
+      selectedPlannerDay: getMondayBasedDayIdx(),
+      rooms: [
+        { code: "ENEM-2026", name: "Foco Total — Vestibulares & ENEM", cat: "Vestibulares & ENEM", goalH: 200 },
+        { code: "ITA-AERO", name: "Turma ITA / IME & Medicina", cat: "Alta Performance & Exatas", goalH: 250 }
+      ],
+      activeRoomCode: "ENEM-2026",
+      subjects: JSON.parse(JSON.stringify(KITS_DATA.enem.subjects)),
+      doneTopics: {},
+      plannerGridByDay: {},
+      tasksByDay: {}
+    };
+
+    // Rollover diário
+    const todayYmd = new Date().toISOString().slice(0, 10);
+    if (state.lastDateYmd !== todayYmd) {
+      state.lastDateYmd = todayYmd;
+      state.verifiedSecondsToday = 0;
+      state.subjects.forEach(s => s.studiedMins = 0);
     }
 
     function saveState() {
-      localStorage.setItem("estudancia_pwa_state", JSON.stringify(appState));
+      localStorage.setItem("estudancia_v24_full_state", JSON.stringify(state));
     }
 
-    // Cronômetro Real
+    // =========================================================================
+    // MOTOR DE CRONÔMETRO + BANCO VERIFICADO ANTI-CHEAT
+    // =========================================================================
+    let timerMode = "free";
     let sessionSeconds = 0;
+    let pomoTargetSeconds = 25 * 60;
     let isRunning = false;
-    let timerInterval = null;
+    let timerLoopId = null;
+
+    function setTimerMode(mode) {
+      if (isRunning) toggleFocusTimer();
+      timerMode = mode;
+      document.querySelectorAll("#tab-foco .segmented-row .seg-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(`modeBtn-${mode}`).classList.add("active");
+      if (mode === "pomo25") pomoTargetSeconds = 25 * 60;
+      if (mode === "pomo50") pomoTargetSeconds = 50 * 60;
+      sessionSeconds = 0;
+      refreshAllUI();
+    }
 
     function formatHMS(sec) {
       const h = String(Math.floor(sec / 3600)).padStart(2, "0");
@@ -533,354 +1043,1098 @@
       return `${Math.floor(mins / 60)}h ${String(mins % 60).padStart(2, "0")}m`;
     }
 
-    function toggleTimer() {
+    function toggleFocusTimer() {
       isRunning = !isRunning;
       const btn = document.getElementById("btnStartPause");
+      const topPill = document.getElementById("topStatusPill");
+
       if (isRunning) {
         btn.textContent = "⏸ Pausar";
         btn.style.background = "linear-gradient(135deg, #F59E0B, #EA580C)";
-        timerInterval = setInterval(() => {
+        topPill.textContent = "⚡ Em Foco";
+        timerLoopId = setInterval(() => {
           sessionSeconds++;
-          appState.verifiedSecondsToday++;
+          state.verifiedSecondsToday++;
+          const todayIdx = getMondayBasedDayIdx();
+          state.weekSecondsByDay[todayIdx] = Math.max(state.weekSecondsByDay[todayIdx] || 0, state.verifiedSecondsToday);
+
           if (sessionSeconds % 60 === 0) {
-            appState.subjects[appState.selectedSubjectIdx].studiedMins++;
+            const subj = state.subjects[state.selectedSubjectIdx];
+            if (subj) subj.studiedMins = (subj.studiedMins || 0) + 1;
+          }
+
+          if (timerMode !== "free" && sessionSeconds >= pomoTargetSeconds) {
+            completeFocusSession();
+            alert("🎉 Ciclo Pomodoro concluído! Sonda impulsionada com sucesso.");
+            return;
           }
           saveState();
-          updateUI();
+          refreshTimerOnlyUI();
         }, 1000);
       } else {
         btn.textContent = "▶ Retomar";
         btn.style.background = "linear-gradient(135deg, #10B981, #00D4B2)";
-        clearInterval(timerInterval);
+        topPill.textContent = "⏸ Pausado";
+        clearInterval(timerLoopId);
       }
       syncFirebaseRoom();
     }
 
-    function finishSession() {
-      clearInterval(timerInterval);
+    function completeFocusSession() {
+      clearInterval(timerLoopId);
       isRunning = false;
       sessionSeconds = 0;
       const btn = document.getElementById("btnStartPause");
       btn.textContent = "▶ Iniciar Missão";
       btn.style.background = "linear-gradient(135deg, #10B981, #00D4B2)";
+      document.getElementById("topStatusPill").textContent = "⚡ Focar";
       saveState();
-      updateUI();
+      refreshAllUI();
       syncFirebaseRoom();
     }
 
-    function onSubjectChange() {
-      appState.selectedSubjectIdx = parseInt(document.getElementById("subjectSelect").value, 10) || 0;
+    function onChangeActiveSubject() {
+      state.selectedSubjectIdx = parseInt(document.getElementById("focusSubjectSelect").value, 10) || 0;
       saveState();
-      updateUI();
+      refreshAllUI();
     }
 
-    function setDailyGoal(hrs) {
-      appState.dailyGoalHours = hrs;
-      saveState();
-      updateUI();
-    }
+    // =========================================================================
+    // SINTETIZADOR DE ÁUDIO NEURAL (RUÍDO MARROM & CHUVA ESPACIAL - WEB AUDIO API)
+    // =========================================================================
+    let audioCtx = null;
+    let noiseNode = null;
+    let gainNode = null;
 
-    function applyKit(type) {
-      const kits = {
-        enem: [
-          { name: "Redação ENEM", weight: 0.20, color: "#00F0FF", studiedMins: 0 },
-          { name: "Matemática & Suas Tecnologias", weight: 0.25, color: "#10B981", studiedMins: 0 },
-          { name: "Ciências da Natureza", weight: 0.25, color: "#A855F7", studiedMins: 0 },
-          { name: "Linguagens & Códigos", weight: 0.15, color: "#F43F5E", studiedMins: 0 },
-          { name: "Ciências Humanas", weight: 0.15, color: "#F59E0B", studiedMins: 0 }
-        ],
-        ita: [
-          { name: "Matemática ITA / IME", weight: 0.32, color: "#00F0FF", studiedMins: 0 },
-          { name: "Física Aprofundada", weight: 0.30, color: "#10B981", studiedMins: 0 },
-          { name: "Química Geral & Orgânica", weight: 0.22, color: "#A855F7", studiedMins: 0 },
-          { name: "Redação & Literatura", weight: 0.08, color: "#F59E0B", studiedMins: 0 },
-          { name: "Inglês Técnico", weight: 0.08, color: "#F43F5E", studiedMins: 0 }
-        ],
-        med: [
-          { name: "Biologia & Fisiologia", weight: 0.25, color: "#10B981", studiedMins: 0 },
-          { name: "Química & Bioquímica", weight: 0.22, color: "#A855F7", studiedMins: 0 },
-          { name: "Física & Mecânica", weight: 0.18, color: "#00F0FF", studiedMins: 0 },
-          { name: "Redação Dissertativa", weight: 0.18, color: "#F43F5E", studiedMins: 0 },
-          { name: "Matemática & Humanidades", weight: 0.17, color: "#F59E0B", studiedMins: 0 }
-        ]
-      };
-      appState.subjects = kits[type] || kits.enem;
-      appState.selectedSubjectIdx = 0;
-      saveState();
-      updateUI();
-      closeModal("kitsModal");
-    }
+    function setAmbientSound(type) {
+      ["off", "brown", "rain"].forEach(k => {
+        const b = document.getElementById(`soundBtn-${k}`);
+        b.style.borderColor = k === type ? "var(--cyan)" : "#243452";
+        b.style.color = k === type ? "var(--cyan)" : "#E2E8F0";
+      });
 
-    // Grade 24h & Tarefas
-    function renderGrid24h() {
-      const container = document.getElementById("grid24hContainer");
-      container.innerHTML = "";
-      const activeSubj = appState.subjects[appState.selectedSubjectIdx];
-      for (let h = 0; h < 24; h++) {
-        const div = document.createElement("div");
-        const painted = appState.grid24h[h];
-        div.className = "hour-slot" + (painted ? " filled" : "");
-        div.textContent = String(h).padStart(2, "0") + "h";
-        if (painted) div.style.background = painted.color;
-        div.onclick = () => {
-          if (appState.grid24h[h]) {
-            delete appState.grid24h[h];
-          } else {
-            appState.grid24h[h] = { name: activeSubj.name, color: activeSubj.color };
-          }
-          saveState();
-          renderGrid24h();
-        };
-        container.appendChild(div);
+      if (noiseNode) {
+        try { noiseNode.stop(); noiseNode.disconnect(); } catch (_) {}
+        noiseNode = null;
       }
+      if (type === "off") return;
+
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const bufferSize = audioCtx.sampleRate * 3;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = buffer.getChannelData(0);
+
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        if (type === "brown") {
+          output[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = output[i];
+          output[i] *= 2.8;
+        } else {
+          output[i] = (lastOut + (0.12 * white)) / 1.12;
+          lastOut = output[i];
+          output[i] *= 0.9;
+        }
+      }
+
+      noiseNode = audioCtx.createBufferSource();
+      noiseNode.buffer = buffer;
+      noiseNode.loop = true;
+
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0.14;
+      noiseNode.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      noiseNode.start(0);
     }
 
-    function quickFillHour() {
-      const activeSubj = appState.subjects[appState.selectedSubjectIdx];
-      for (let h = 8; h < 24; h++) {
-        if (!appState.grid24h[h]) {
-          appState.grid24h[h] = { name: activeSubj.name, color: activeSubj.color };
+    // =========================================================================
+    // RENDERIZAÇÃO 60 FPS: ESTRELAS + PLANETA 3D + ONDA SENOIDAL DUPLA
+    // =========================================================================
+    const stars = Array.from({ length: 65 }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * 1.7 + 0.5,
+      a: Math.random() * 0.7 + 0.2,
+      s: Math.random() * 0.015 + 0.004
+    }));
+
+    let animPhase = 0;
+    function renderCosmicCanvasLoop() {
+      animPhase += isRunning ? 0.065 : 0.02;
+
+      // 1. Starfield Background
+      const bgC = document.getElementById("starfieldBg");
+      if (bgC.width !== window.innerWidth) {
+        bgC.width = window.innerWidth;
+        bgC.height = window.innerHeight;
+      }
+      const bgCtx = bgC.getContext("2d");
+      bgCtx.clearRect(0, 0, bgC.width, bgC.height);
+      stars.forEach(st => {
+        const alpha = 0.35 + Math.sin(animPhase * 2 + st.x * 10) * 0.3;
+        bgCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        bgCtx.beginPath();
+        bgCtx.arc(st.x * bgC.width, st.y * bgC.height, st.r, 0, Math.PI * 2);
+        bgCtx.fill();
+      });
+
+      // 2. Planeta 3D + Anel Orbital
+      const pCanvas = document.getElementById("planetCanvas");
+      if (pCanvas) {
+        const ctx = pCanvas.getContext("2d");
+        const w = pCanvas.width, h = pCanvas.height;
+        const cx = w / 2, cy = h / 2;
+        ctx.clearRect(0, 0, w, h);
+
+        const verifiedMins = Math.floor(state.verifiedSecondsToday / 60);
+        const goalMins = state.dailyGoalHours * 60;
+        const pct = Math.min(1, verifiedMins / Math.max(1, goalMins));
+
+        let coreLight = "#38BDF8", coreDark = "#1D4ED8", atmo = "#00F0FF", hasRings = false;
+        if (verifiedMins >= 30 && verifiedMins < 120) {
+          coreLight = "#FB923C"; coreDark = "#9A3412"; atmo = "#F97316";
+        } else if (verifiedMins >= 120) {
+          coreLight = "#FBBF24"; coreDark = "#78350F"; atmo = "#F59E0B"; hasRings = true;
+        }
+
+        // Aura Radial
+        const aura = ctx.createRadialGradient(cx, cy, 24, cx, cy, 145);
+        aura.addColorStop(0, atmo + "44");
+        aura.addColorStop(0.6, atmo + "12");
+        aura.addColorStop(1, "transparent");
+        ctx.fillStyle = aura;
+        ctx.beginPath(); ctx.arc(cx, cy, 145, 0, Math.PI * 2); ctx.fill();
+
+        // Trilha do Anel Orbital
+        const ringR = 112;
+        ctx.strokeStyle = "#15233E";
+        ctx.lineWidth = 10;
+        ctx.beginPath(); ctx.arc(cx, cy, ringR, 0, Math.PI * 2); ctx.stroke();
+
+        // Arco de Progresso Neon
+        const sweep = Math.max(0.06, pct) * Math.PI * 2;
+        const gradArc = ctx.createLinearGradient(0, 0, w, h);
+        gradArc.addColorStop(0, "#00F0FF");
+        gradArc.addColorStop(1, "#10B981");
+        ctx.strokeStyle = gradArc;
+        ctx.lineCap = "round";
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.arc(cx, cy, ringR, -Math.PI / 2, -Math.PI / 2 + sweep);
+        ctx.stroke();
+
+        // Esfera 3D do Planeta
+        const pR = 68;
+        const sphere = ctx.createRadialGradient(cx - 22, cy - 22, 8, cx, cy, pR);
+        sphere.addColorStop(0, coreLight);
+        sphere.addColorStop(0.65, coreDark);
+        sphere.addColorStop(1, "#040814");
+        ctx.fillStyle = sphere;
+        ctx.beginPath(); ctx.arc(cx, cy, pR, 0, Math.PI * 2); ctx.fill();
+
+        if (hasRings) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(-0.35);
+          ctx.strokeStyle = "rgba(251, 191, 36, 0.7)";
+          ctx.lineWidth = 7;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, pR * 1.45, pR * 0.36, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // Lua Orbitando
+        const satAngle = animPhase * 0.45;
+        const sx = cx + Math.cos(satAngle) * ringR;
+        const sy = cy + Math.sin(satAngle) * ringR;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.shadowColor = "#00F0FF";
+        ctx.shadowBlur = 12;
+        ctx.beginPath(); ctx.arc(sx, sy, 6.5, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      // 3. Onda Senoidal Dupla Entrelaçada (WaveNotificationRenderer)
+      const wCanvas = document.getElementById("waveCanvas");
+      if (wCanvas) {
+        const wCtx = wCanvas.getContext("2d");
+        const W = wCanvas.width, H = wCanvas.height, cy = H / 2;
+        wCtx.clearRect(0, 0, W, H);
+
+        const grad = wCtx.createLinearGradient(0, 0, W, 0);
+        grad.addColorStop(0, "#10B981");
+        grad.addColorStop(0.5, "#00F0FF");
+        grad.addColorStop(1, "#A855F7");
+
+        // Onda Secundária
+        wCtx.strokeStyle = "rgba(0, 240, 255, 0.32)";
+        wCtx.lineWidth = 3;
+        wCtx.beginPath();
+        for (let x = 10; x <= W - 10; x += 6) {
+          const nx = x / W;
+          const y = cy + Math.cos(nx * 18 + animPhase * 1.1) * (H * 0.22);
+          x === 10 ? wCtx.moveTo(x, y) : wCtx.lineTo(x, y);
+        }
+        wCtx.stroke();
+
+        // Onda Principal Neon
+        wCtx.strokeStyle = grad;
+        wCtx.lineWidth = 5;
+        wCtx.lineCap = "round";
+        wCtx.beginPath();
+        for (let x = 10; x <= W - 10; x += 5) {
+          const nx = x / W;
+          const amp = isRunning ? H * 0.32 : H * 0.16;
+          const y = cy + Math.sin(nx * 22 - animPhase * 1.6) * amp;
+          x === 10 ? wCtx.moveTo(x, y) : wCtx.lineTo(x, y);
+        }
+        wCtx.stroke();
+      }
+
+      // 4. Se o Modal de Tutorial estiver aberto, anima o Planeta com Anéis do Tutorial
+      const tutModal = document.getElementById("tutorialModal");
+      if (tutModal && tutModal.classList.contains("open")) {
+        drawTutorialCanvas();
+      }
+
+      requestAnimationFrame(renderCosmicCanvasLoop);
+    }
+
+    function refreshTimerOnlyUI() {
+      const displaySec = timerMode === "free" ? sessionSeconds : Math.max(0, pomoTargetSeconds - sessionSeconds);
+      document.getElementById("mainTimerDisplay").textContent = formatHMS(displaySec);
+
+      const verifiedMins = Math.floor(state.verifiedSecondsToday / 60);
+      const goalMins = state.dailyGoalHours * 60;
+      const pct = Math.min(100, Math.round((verifiedMins / Math.max(1, goalMins)) * 100));
+      document.getElementById("heroGoalSummary").textContent = `🎯 Meta ${state.dailyGoalHours}h • ${pct}% concluído`;
+      document.getElementById("waveRightTelemetry").textContent = `🛰️ Sonda: ${verifiedMins * 15}k km`;
+    }
+
+    // =========================================================================
+    // ATUALIZAÇÃO COMPLETA DAS 5 ABAS
+    // =========================================================================
+    function refreshAllUI() {
+      refreshTimerOnlyUI();
+
+      const verifiedMins = Math.floor(state.verifiedSecondsToday / 60);
+      const badge = document.getElementById("planetStageBadge");
+      if (verifiedMins < 30) badge.textContent = "🌍 Nível 1 • Terra";
+      else if (verifiedMins < 120) badge.textContent = "🔴 Nível 2 • Marte";
+      else if (verifiedMins < 300) badge.textContent = "🪐 Nível 3 • Saturno";
+      else badge.textContent = "🌌 Nível 4 • Interestelar";
+
+      // Select de Matérias no Foco e no Planejador
+      const focusSel = document.getElementById("focusSubjectSelect");
+      const brushSel = document.getElementById("plannerBrushSubject");
+      const optionsHtml = state.subjects.map((s, idx) =>
+        `<option value="${idx}" ${idx === state.selectedSubjectIdx ? "selected" : ""}>📘 ${s.name}</option>`
+      ).join("");
+      focusSel.innerHTML = optionsHtml;
+      brushSel.innerHTML = optionsHtml;
+
+      // Dock de Frequência na Semana
+      const todayIdx = getMondayBasedDayIdx();
+      state.weekSecondsByDay[todayIdx] = Math.max(state.weekSecondsByDay[todayIdx] || 0, state.verifiedSecondsToday);
+      let activeDays = 0;
+      const dockGrid = document.getElementById("weekDockGrid");
+      dockGrid.innerHTML = DAY_NAMES.map((lbl, idx) => {
+        const isDone = (state.weekSecondsByDay[idx] || 0) >= 60;
+        const isToday = idx === todayIdx;
+        if (isDone) activeDays++;
+        const sym = isDone ? "✓" : isToday ? "•" : "·";
+        return `
+          <div class="day-col">
+            <div class="day-capsule ${isDone ? 'done' : isToday ? 'today' : ''}">${sym}</div>
+            <div class="day-lbl ${isToday ? 'today' : ''}">${lbl}</div>
+          </div>
+        `;
+      }).join("");
+      document.getElementById("weekActiveCountLabel").textContent = `${activeDays}/7 dias ativos`;
+
+      renderPlannerTab();
+      renderSubjectsTab();
+      renderStatisticsTab();
+      renderRoomsChips();
+    }
+
+    // =========================================================================
+    // ABA 2: PLANEJADOR 24H + D-DAY + TAREFAS
+    // =========================================================================
+    function renderPlannerTab() {
+      // D-Day
+      document.getElementById("dDayTitleLabel").textContent = state.dDayTitle;
+      const diffMs = new Date(state.dDayDate).getTime() - Date.now();
+      const daysLeft = Math.max(0, Math.ceil(diffMs / 86400000));
+      document.getElementById("dDayDaysLeft").textContent = `${daysLeft} dias`;
+
+      // Seletor de dias
+      const dayTabs = document.getElementById("plannerDayTabs");
+      dayTabs.innerHTML = DAY_NAMES.map((d, idx) => `
+        <button class="pill-chip ${idx === state.selectedPlannerDay ? 'active' : ''}" onclick="selectPlannerDay(${idx})">${d}</button>
+      `).join("");
+
+      // Grade 24h
+      const dayKey = String(state.selectedPlannerDay);
+      const dayGrid = state.plannerGridByDay[dayKey] || {};
+      const gridBox = document.getElementById("planner24hGrid");
+      gridBox.innerHTML = "";
+      for (let h = 0; h < 24; h++) {
+        const slot = dayGrid[h];
+        const div = document.createElement("div");
+        div.className = "slot-24h";
+        if (slot) {
+          div.style.background = slot.color + "24";
+          div.style.borderColor = slot.color;
+        }
+        div.innerHTML = `
+          <span class="slot-hour" style="${slot ? 'color:#FFF;' : ''}">${String(h).padStart(2, '0')}:00</span>
+          <span class="slot-subj" style="${slot ? 'color:' + slot.color : ''}">${slot ? slot.name : 'Livre'}</span>
+        `;
+        div.onclick = () => toggleHourSlot(h);
+        gridBox.appendChild(div);
+      }
+
+      // Tarefas
+      const tasks = state.tasksByDay[dayKey] || [];
+      const doneCount = tasks.filter(t => t.done).length;
+      document.getElementById("tasksProgressBadge").textContent = `${doneCount}/${tasks.length} concluídas`;
+      const listBox = document.getElementById("plannerTasksList");
+      listBox.innerHTML = tasks.map((t, i) => `
+        <div onclick="toggleTaskDone(${i})" style="display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:#091120; border:1px solid ${t.done ? 'var(--emerald)' : '#1E293B'}; border-radius:16px; margin-bottom:8px; cursor:pointer;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:16px;">${t.done ? '✅' : '⭕'}</span>
+            <span style="font-size:13px; font-weight:700; ${t.done ? 'text-decoration:line-through; color:#64748B;' : 'color:#FFF;'}">${t.text}</span>
+          </div>
+          <span onclick="event.stopPropagation(); deletePlannerTask(${i})" style="color:#F43F5E; font-weight:900; padding:4px;">✕</span>
+        </div>
+      `).join("");
+    }
+
+    function selectPlannerDay(idx) {
+      state.selectedPlannerDay = idx;
+      saveState();
+      renderPlannerTab();
+    }
+
+    function toggleHourSlot(h) {
+      const dayKey = String(state.selectedPlannerDay);
+      if (!state.plannerGridByDay[dayKey]) state.plannerGridByDay[dayKey] = {};
+      const brushIdx = parseInt(document.getElementById("plannerBrushSubject").value, 10) || 0;
+      const subj = state.subjects[brushIdx] || state.subjects[0];
+
+      if (state.plannerGridByDay[dayKey][h]) {
+        delete state.plannerGridByDay[dayKey][h];
+      } else {
+        state.plannerGridByDay[dayKey][h] = { name: subj.name, color: subj.color };
+      }
+      saveState();
+      renderPlannerTab();
+    }
+
+    function quickPaintGrid() {
+      const dayKey = String(state.selectedPlannerDay);
+      if (!state.plannerGridByDay[dayKey]) state.plannerGridByDay[dayKey] = {};
+      const brushIdx = parseInt(document.getElementById("plannerBrushSubject").value, 10) || 0;
+      const subj = state.subjects[brushIdx] || state.subjects[0];
+      for (let h = 7; h < 24; h++) {
+        if (!state.plannerGridByDay[dayKey][h]) {
+          state.plannerGridByDay[dayKey][h] = { name: subj.name, color: subj.color };
           break;
         }
       }
       saveState();
-      renderGrid24h();
+      renderPlannerTab();
     }
 
-    function addTask() {
+    function quickCloseCurrentHour() {
+      const h = new Date().getHours();
+      const dayKey = String(state.selectedPlannerDay);
+      if (!state.plannerGridByDay[dayKey]) state.plannerGridByDay[dayKey] = {};
+      const brushIdx = parseInt(document.getElementById("plannerBrushSubject").value, 10) || 0;
+      const subj = state.subjects[brushIdx] || state.subjects[0];
+      state.plannerGridByDay[dayKey][h] = { name: subj.name, color: subj.color };
+      saveState();
+      renderPlannerTab();
+    }
+
+    function promptChangeDDay() {
+      const t = prompt("Nome da Prova / Missão D-Day:", state.dDayTitle);
+      if (t) state.dDayTitle = t.trim();
+      const d = prompt("Data da Prova (AAAA-MM-DD):", state.dDayDate);
+      if (d && /^\d{4}-\d{2}-\d{2}$/.test(d.trim())) state.dDayDate = d.trim();
+      saveState();
+      renderPlannerTab();
+    }
+
+    function addPlannerTask() {
       const inp = document.getElementById("newTaskInput");
-      const val = inp.value.trim();
-      if (!val) return;
-      appState.tasks.push({ text: val, done: false });
+      const txt = inp.value.trim();
+      if (!txt) return;
+      const dayKey = String(state.selectedPlannerDay);
+      if (!state.tasksByDay[dayKey]) state.tasksByDay[dayKey] = [];
+      state.tasksByDay[dayKey].push({ text: txt, done: false });
       inp.value = "";
       saveState();
-      renderTasks();
+      renderPlannerTab();
     }
 
-    function renderTasks() {
-      const box = document.getElementById("tasksListContainer");
-      box.innerHTML = "";
-      appState.tasks.forEach((t, idx) => {
-        const row = document.createElement("div");
-        row.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:10px; background:#0A1120; border:1px solid #1E293B; border-radius:12px; margin-bottom:8px; cursor:pointer;";
-        row.innerHTML = `<span style="font-size:13px; ${t.done ? 'text-decoration:line-through; color:#64748B;' : ''}">${t.done ? '✅' : '⭕'} ${t.text}</span>
-                         <span style="color:#EF4444; font-size:12px; font-weight:800;" onclick="event.stopPropagation(); removeTask(${idx})">✕</span>`;
-        row.onclick = () => { appState.tasks[idx].done = !appState.tasks[idx].done; saveState(); renderTasks(); };
-        box.appendChild(row);
-      });
-    }
-
-    function removeTask(idx) {
-      appState.tasks.splice(idx, 1);
+    function toggleTaskDone(i) {
+      const dayKey = String(state.selectedPlannerDay);
+      state.tasksByDay[dayKey][i].done = !state.tasksByDay[dayKey][i].done;
       saveState();
-      renderTasks();
+      renderPlannerTab();
     }
 
-    // Sincronização Real-Time com o MESMO Firebase do App Android!
+    function deletePlannerTask(i) {
+      const dayKey = String(state.selectedPlannerDay);
+      state.tasksByDay[dayKey].splice(i, 1);
+      saveState();
+      renderPlannerTab();
+    }
+
+    // =========================================================================
+    // ABA 3: GRUPOS MULTIPLAYER AO VIVO + GERADOR DE CARD 1080x1920
+    // =========================================================================
+    let currentRankingTab = "live";
+    let cachedRoomMembers = [];
+    let currentStoryQuote = QUOTES[0];
+
+    function renderRoomsChips() {
+      const box = document.getElementById("roomsChipContainer");
+      box.innerHTML = state.rooms.map(r => `
+        <button class="pill-chip ${r.code === state.activeRoomCode ? 'active' : ''}" onclick="selectRoom('${r.code}')">🎓 ${r.name} • #${r.code}</button>
+      `).join("") + `<button class="pill-chip" style="border-color:#38BDF8; color:#38BDF8;" onclick="openModal('profileModal')">+ Sala / Código</button>`;
+    }
+
+    function selectRoom(code) {
+      state.activeRoomCode = code;
+      const r = state.rooms.find(x => x.code === code) || state.rooms[0];
+      document.getElementById("groupTitleHeader").textContent = r.name;
+      document.getElementById("groupCategoryHeader").textContent = `${r.cat} • Código #${r.code}`;
+      saveState();
+      renderRoomsChips();
+      syncFirebaseRoom();
+    }
+
+    function setRankingTab(tab) {
+      currentRankingTab = tab;
+      ["live", "today", "week"].forEach(k => {
+        document.getElementById(`rankTab-${k}`).classList.toggle("active", k === tab);
+      });
+      renderMembersList();
+    }
+
     async function syncFirebaseRoom() {
       try {
-        const verifiedMins = Math.floor(appState.verifiedSecondsToday / 60);
-        const activeSubj = appState.subjects[appState.selectedSubjectIdx]?.name || "Geral";
-        const initials = appState.userName.split(" ").map(w => w.replace(/[^a-zA-Z0-9]/g, "")).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase() || "IO";
+        const verifiedMinsToday = Math.floor(state.verifiedSecondsToday / 60);
+        const verifiedMinsWeek = Math.floor(state.weekSecondsByDay.reduce((a, b) => a + b, 0) / 60);
+        const activeSubj = state.subjects[state.selectedSubjectIdx]?.name || "Geral";
+        const initials = state.userName.split(" ").map(w => w.replace(/[^a-zA-Z0-9]/g, "")).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase() || "EU";
 
-        await fetch(`${FIREBASE_URL}/rooms/${appState.activeRoomCode}/members/${appState.userId}.json`, {
+        await fetch(`${FIREBASE_URL}/rooms/${state.activeRoomCode}/members/${state.userId}.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id: appState.userId,
-            name: appState.userName,
-            initials: initials,
-            status: appState.userStatus,
+            id: state.userId,
+            name: state.userName,
+            initials,
+            status: state.userStatus,
             subject: activeSubj,
             isStudying: isRunning,
-            minsToday: verifiedMins,
-            minsWeek: verifiedMins,
+            minsToday: verifiedMinsToday,
+            minsWeek: Math.max(verifiedMinsWeek, verifiedMinsToday),
             updatedAt: Date.now()
           })
         });
 
-        const res = await fetch(`${FIREBASE_URL}/rooms/${appState.activeRoomCode}/members.json?cb=${Date.now()}`);
+        const res = await fetch(`${FIREBASE_URL}/rooms/${state.activeRoomCode}/members.json?cb=${Date.now()}`);
         const data = await res.json();
-        const container = document.getElementById("membersListContainer");
         if (!data) return;
 
-        const list = Object.values(data).sort((a, b) => (b.minsToday || 0) - (a.minsToday || 0));
-        container.innerHTML = list.map((m, i) => {
-          const medal = i === 0 ? "🥇 1º" : i === 1 ? "🥈 2º" : i === 2 ? "🥉 3º" : `#${i + 1}`;
-          const activeNow = m.isStudying && (Date.now() - (m.updatedAt || 0) < 900000);
-          return `
-            <div class="member-card">
-              <div style="display:flex; align-items:center; gap:12px; min-width:0;">
-                <div class="avatar-circle">${m.initials || "ES"}</div>
-                <div style="min-width:0;">
-                  <div style="font-weight:800; font-size:14.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                    ${m.name} <span style="color:var(--cyan); font-size:11px;">${medal}</span>
-                  </div>
-                  <div style="font-size:11.5px; color:${activeNow ? '#10B981' : '#38BDF8'}; font-weight:700;">
-                    ${activeNow ? '🟢 Estudando: ' + (m.subject || 'Foco') : '📘 ' + (m.subject || 'Geral')}
-                  </div>
-                  <div style="font-size:11px; color:#94A3B8; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${m.status || ''}</div>
-                </div>
-              </div>
-              <div style="text-align:right; flex-shrink:0;">
-                <div style="font-weight:900; font-size:15px;">${formatHM(m.minsToday || 0)}</div>
-                <div style="font-size:10px; color:#64748B;">hoje</div>
-              </div>
-            </div>
-          `;
-        }).join("");
+        // Deduplica por nome mantendo o mais recente
+        const byName = {};
+        Object.values(data).forEach(m => {
+          const key = (m.name || "Estudante").trim().toLowerCase();
+          if (!byName[key] || (m.updatedAt || 0) > (byName[key].updatedAt || 0)) {
+            byName[key] = m;
+          }
+        });
+
+        cachedRoomMembers = Object.values(byName);
+        renderMembersList();
       } catch (e) {
-        console.warn("Sync offline:", e);
+        console.warn("Firebase offline:", e);
       }
     }
 
-    function switchRoom(code, title) {
-      appState.activeRoomCode = code;
-      appState.activeRoomTitle = title;
-      document.getElementById("activeRoomTitle").textContent = title;
-      document.getElementById("displayRoomCode").textContent = code;
-      document.querySelectorAll("#tab-grupos .chip").forEach(c => c.classList.remove("active"));
-      document.getElementById(`roomChip-${code}`).classList.add("active");
-      saveState();
-      syncFirebaseRoom();
-    }
-
-    function saveProfile() {
-      const n = document.getElementById("inputUserName").value.trim();
-      const s = document.getElementById("inputUserStatus").value.trim();
-      if (n) appState.userName = n;
-      if (s) appState.userStatus = s;
-      saveState();
-      updateUI();
-      syncFirebaseRoom();
-      closeModal("profileModal");
-    }
-
-    async function sendFeedback() {
-      const msg = document.getElementById("feedbackMsg").value.trim();
-      if (msg.length < 4) return alert("Escreva sua mensagem primeiro!");
-      const id = `fb_ios_${Date.now()}`;
-      await fetch(`${FIREBASE_URL}/feedbacks/${id}.json`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id,
-          userId: appState.userId,
-          userName: appState.userName,
-          category: "📱 Web App / iOS PWA",
-          ratingStars: 5,
-          message: msg,
-          device: navigator.userAgent,
-          timestamp: Date.now()
-        })
+    function renderMembersList() {
+      const palette = ["#00F0FF", "#10B981", "#A855F7", "#F59E0B", "#EC4899", "#38BDF8"];
+      const sorted = [...cachedRoomMembers].sort((a, b) => {
+        if (currentRankingTab === "week") return (b.minsWeek || 0) - (a.minsWeek || 0);
+        if (currentRankingTab === "today") return (b.minsToday || 0) - (a.minsToday || 0);
+        const aLive = a.isStudying && (Date.now() - (a.updatedAt || 0) < 900000) ? 1 : 0;
+        const bLive = b.isStudying && (Date.now() - (b.updatedAt || 0) < 900000) ? 1 : 0;
+        return (bLive - aLive) || ((b.minsToday || 0) - (a.minsToday || 0));
       });
-      document.getElementById("feedbackMsg").value = "";
-      closeModal("feedbackModal");
-      alert("🚀 Feedback enviado direto para o banco de dados!");
-    }
 
-    function updateUI() {
-      document.getElementById("timerText").textContent = formatHMS(sessionSeconds);
-      document.getElementById("displayUserName").textContent = appState.userName;
-      document.getElementById("goalHoursLabel").textContent = `${appState.dailyGoalHours}h`;
-      document.getElementById("goalSummaryLabel").textContent = `${appState.dailyGoalHours}h`;
+      const liveCount = sorted.filter(m => m.isStudying && (Date.now() - (m.updatedAt || 0) < 900000)).length;
+      document.getElementById("studyingNowBadge").textContent = `🟢 ${liveCount} estudando`;
 
-      const totalGoalMins = appState.dailyGoalHours * 60;
-      const verifiedMins = Math.floor(appState.verifiedSecondsToday / 60);
-      const pct = Math.min(100, Math.round((verifiedMins / totalGoalMins) * 100));
-      document.getElementById("todayProgressText").textContent = `${formatHM(verifiedMins)} (${pct}%)`;
-      document.getElementById("todayProgressBar").style.width = `${pct}%`;
+      const totalWeekMins = sorted.reduce((acc, m) => acc + (m.minsWeek || m.minsToday || 0), 0);
+      const pct = Math.min(100, Math.round((totalWeekMins / (200 * 60)) * 100));
+      document.getElementById("groupWeeklyGoalText").textContent = `Meta Semanal: ${formatHM(totalWeekMins)} / 200h`;
+      document.getElementById("groupWeeklyGoalPct").textContent = `${pct}%`;
+      document.getElementById("groupWeeklyBar").style.width = `${Math.max(4, pct)}%`;
 
-      // Atualiza evolução orbital
-      const stageEl = document.getElementById("stageLabel");
-      if (verifiedMins < 30) stageEl.textContent = "🌍 Nível 1 • Órbita da Terra";
-      else if (verifiedMins < 120) stageEl.textContent = "🔴 Nível 2 • Órbita de Marte";
-      else if (verifiedMins < 300) stageEl.textContent = "🪐 Nível 3 • Anéis de Saturno";
-      else stageEl.textContent = "🌌 Nível 4 • Espaço Interestelar";
+      const box = document.getElementById("groupMembersList");
+      box.innerHTML = sorted.map((m, idx) => {
+        const isMe = m.id === state.userId;
+        const rankBadge = idx === 0 ? "🥇 1º" : idx === 1 ? "🥈 2º" : idx === 2 ? "🥉 3º" : `#${idx + 1}`;
+        const isLive = m.isStudying && (Date.now() - (m.updatedAt || 0) < 900000);
+        const color = palette[Math.abs((m.id || "").charCodeAt(0) || idx) % palette.length];
+        const mins = currentRankingTab === "week" ? (m.minsWeek || 0) : (m.minsToday || 0);
 
-      // Select de matérias
-      const sel = document.getElementById("subjectSelect");
-      sel.innerHTML = appState.subjects.map((s, i) =>
-        `<option value="${i}" ${i === appState.selectedSubjectIdx ? "selected" : ""}>📘 ${s.name}</option>`
-      ).join("");
-
-      // Lista de matérias
-      const subjBox = document.getElementById("subjectsListContainer");
-      subjBox.innerHTML = appState.subjects.map(s => {
-        const goalM = Math.round(s.weight * totalGoalMins);
-        const sPct = Math.min(100, Math.round((s.studiedMins / Math.max(1, goalM)) * 100));
         return `
-          <div style="background:#091120; border:1px solid #1E293B; border-radius:18px; padding:14px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight:800; font-size:14px; color:${s.color};">● ${s.name}</span>
-              <span style="font-size:12px; color:#94A3B8;">Meta: ${formatHM(goalM)}</span>
+          <div class="member-row ${isMe ? 'me' : ''}">
+            <div class="avatar-orb" style="background:${color};">${m.initials || 'ES'}</div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <span style="font-weight:900; font-size:15px;">${m.name}</span>
+                <span style="background:rgba(255,107,44,0.16); color:var(--orange); padding:2px 8px; border-radius:999px; font-size:10.5px; font-weight:800;">
+                  ${isMe ? rankBadge + ' • Você' : rankBadge}
+                </span>
+                ${isMe ? `<span onclick="openStoryCardGenerator()" style="background:#132542; border:1px solid #38BDF8; color:#38BDF8; padding:2px 7px; border-radius:999px; font-size:9.5px; font-weight:800; cursor:pointer;">📸 Status</span>` : ''}
+              </div>
+              <div style="display:inline-block; margin-top:4px; padding:3px 8px; border-radius:8px; font-size:11px; font-weight:800; background:${isLive ? 'rgba(16,185,129,0.16)' : '#162036'}; color:${isLive ? '#10B981' : '#38BDF8'};">
+                ${isLive ? '🟢 Estudando: ' + (m.subject || 'Foco') : '📘 Matéria: ' + (m.subject || 'Geral')}
+              </div>
+              <div style="font-size:11px; color:var(--muted); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${m.status || ''}</div>
             </div>
-            <div class="progress-track"><div class="progress-fill" style="width:${sPct}%; background:${s.color};"></div></div>
-            <div style="font-size:12px; color:#CBD5E1; margin-top:6px;">Hoje: ${formatHM(s.studiedMins)} (${sPct}%)</div>
+            <div style="text-align:right; flex-shrink:0;">
+              <div style="font-weight:900; font-size:15.5px; font-family:monospace;">${formatHM(mins)}</div>
+              <div style="font-size:10px; color:#64748B;">${currentRankingTab === 'week' ? 'na semana' : 'hoje'}</div>
+            </div>
           </div>
         `;
       }).join("");
     }
 
-    function switchTab(tabId, btnEl) {
-      document.querySelectorAll(".tab-view").forEach(v => v.classList.remove("active"));
-      document.getElementById(`tab-${tabId}`).classList.add("active");
-      document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
-      btnEl.classList.add("active");
-      if (tabId === "grupos") syncFirebaseRoom();
+    // GERADOR DE IMAGEM 1080x1920 PARA STORIES / STATUS
+    function openStoryCardGenerator() {
+      currentStoryQuote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+      renderStoryCanvas1080();
+      openModal("storyCardModal");
     }
 
-    function openModal(id) { document.getElementById(id).classList.add("open"); }
-    function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+    function rerollStoryQuote() {
+      const others = QUOTES.filter(q => q !== currentStoryQuote);
+      currentStoryQuote = others[Math.floor(Math.random() * others.length)];
+      renderStoryCanvas1080();
+    }
 
-    // Animação 60 FPS do Planeta Orbital no Canvas
-    let orbitAngle = 0;
-    function drawOrbitLoop() {
-      const canvas = document.getElementById("planetCanvas");
-      const ctx = canvas.getContext("2d");
-      const cx = 210, cy = 210;
-      ctx.clearRect(0, 0, 420, 420);
+    function renderStoryCanvas1080() {
+      const c = document.getElementById("storyGeneratorCanvas");
+      const ctx = c.getContext("2d");
+      const W = 1080, H = 1920;
 
-      // Aura
-      const aura = ctx.createRadialGradient(cx, cy, 30, cx, cy, 175);
-      aura.addColorStop(0, "rgba(0, 240, 255, 0.25)");
+      // Fundo Espacial 9:16
+      const bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0, "#040814");
+      bg.addColorStop(0.5, "#0A162E");
+      bg.addColorStop(1, "#03060E");
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      // Moldura Neon
+      ctx.strokeStyle = "#00F0FF";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(48, 56, W - 96, H - 112);
+
+      // Ordena ranking
+      const sorted = [...cachedRoomMembers].sort((a, b) => (b.minsToday || 0) - (a.minsToday || 0));
+      const myPos = Math.max(1, sorted.findIndex(m => m.id === state.userId) + 1);
+      const verifiedMins = Math.floor(state.verifiedSecondsToday / 60);
+
+      // Cabeçalho
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "900 40px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("🚀 ORGANIZANCIA ESTUDANCIA", W / 2, 150);
+
+      ctx.fillStyle = "#00F0FF";
+      ctx.font = "bold 28px sans-serif";
+      ctx.fillText(`🎓 Sala #${state.activeRoomCode}`, W / 2, 215);
+
+      // Badge de Colocação
+      ctx.fillStyle = myPos === 1 ? "#FBBF24" : "#00F0FF";
+      ctx.font = "900 34px sans-serif";
+      const rankTitle = myPos === 1 ? "👑 1º LUGAR NO RANKING DA SALA" : `🔥 TOP #${myPos} NO RANKING AO VIVO`;
+      ctx.fillText(rankTitle, W / 2, 340);
+
+      // Nome do Aluno + Matéria
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "900 58px sans-serif";
+      ctx.fillText(state.userName, W / 2, 470);
+
+      const activeSubj = state.subjects[state.selectedSubjectIdx]?.name || "Foco Total";
+      ctx.fillStyle = "#10B981";
+      ctx.font = "bold 32px sans-serif";
+      ctx.fillText(`📘 Foco em: ${activeSubj}`, W / 2, 535);
+
+      // Tempo Gigante
+      ctx.fillStyle = "#0B1528";
+      ctx.fillRect(110, 610, W - 220, 250);
+      ctx.strokeStyle = "#1E293B";
+      ctx.strokeRect(110, 610, W - 220, 250);
+
+      ctx.fillStyle = "#94A3B8";
+      ctx.font = "bold 26px sans-serif";
+      ctx.fillText("TEMPO LÍQUIDO AUDITADO HOJE", W / 2, 675);
+
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = "900 116px sans-serif";
+      ctx.fillText(formatHM(verifiedMins), W / 2, 810);
+
+      // Top 3 Pódio
+      ctx.fillStyle = "#94A3B8";
+      ctx.font = "bold 28px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("🏆 LÍDERES DO ESQUADRÃO", 110, 960);
+
+      sorted.slice(0, 3).forEach((m, i) => {
+        const y = 1000 + i * 115;
+        ctx.fillStyle = "#091120";
+        ctx.fillRect(110, y, W - 220, 92);
+        ctx.strokeStyle = i === 0 ? "#FBBF24" : "#1E293B";
+        ctx.strokeRect(110, y, W - 220, 92);
+
+        const medal = i === 0 ? "🥇 1º" : i === 1 ? "🥈 2º" : "🥉 3º";
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 32px sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText(`${medal}   ${(m.name || 'Estudante').slice(0, 20)}`, 140, y + 58);
+
+        ctx.fillStyle = i === 0 ? "#FBBF24" : "#00F0FF";
+        ctx.textAlign = "right";
+        ctx.fillText(formatHM(m.minsToday || 0), W - 140, y + 58);
+      });
+
+      // Frase Motivacional no Rodapé
+      ctx.fillStyle = "#E2E8F0";
+      ctx.font = "italic 30px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(currentStoryQuote.slice(0, 52), W / 2, 1520);
+      if (currentStoryQuote.length > 52) {
+        ctx.fillText(currentStoryQuote.slice(52), W / 2, 1568);
+      }
+
+      ctx.fillStyle = "#64748B";
+      ctx.font = "bold 24px sans-serif";
+      ctx.fillText(`Código da Sala: #${state.activeRoomCode} • App Organizancia Estudancia`, W / 2, 1790);
+    }
+
+    function shareOrDownloadStoryCard() {
+      const c = document.getElementById("storyGeneratorCanvas");
+      c.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], "Estudancia_Ranking_Story.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: "Ranking Organizancia Estudancia",
+              text: `🚀 Estudando na sala #${state.activeRoomCode} no Organizancia Estudancia!`
+            });
+            return;
+          } catch (_) {}
+        }
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "Estudancia_Ranking_Story.png";
+        a.click();
+      }, "image/png");
+    }
+
+    function saveGroupProfile() {
+      const n = document.getElementById("inputProfileName").value.trim();
+      const s = document.getElementById("inputProfileStatus").value.trim();
+      const c = document.getElementById("inputCustomRoomCode").value.trim().toUpperCase();
+      if (n) state.userName = n;
+      if (s) state.userStatus = s;
+      if (c) {
+        if (!state.rooms.find(r => r.code === c)) {
+          state.rooms.push({ code: c, name: `Esquadrão ${c}`, cat: "Sala Personalizada", goalH: 150 });
+        }
+        state.activeRoomCode = c;
+      }
+      saveState();
+      refreshAllUI();
+      syncFirebaseRoom();
+      closeModal("profileModal");
+    }
+
+    // =========================================================================
+    // ABA 4: ESTATÍSTICAS (GRÁFICO DE BARRAS + DONUT)
+    // =========================================================================
+    function renderStatisticsTab() {
+      const verifiedTodayMins = Math.floor(state.verifiedSecondsToday / 60);
+      const verifiedWeekMins = Math.floor(state.weekSecondsByDay.reduce((a, b) => a + b, 0) / 60);
+      document.getElementById("statTodayTotal").textContent = formatHM(verifiedTodayMins);
+      document.getElementById("statWeekTotal").textContent = formatHM(Math.max(verifiedWeekMins, verifiedTodayMins));
+
+      // 1. Gráfico de Barras Semanal
+      const barC = document.getElementById("weeklyBarChart");
+      if (barC) {
+        const ctx = barC.getContext("2d");
+        const W = barC.width, H = barC.height;
+        ctx.clearRect(0, 0, W, H);
+        const maxMins = Math.max(60, ...state.weekSecondsByDay.map(s => s / 60));
+        const slotW = W / 7;
+
+        DAY_NAMES.forEach((lbl, i) => {
+          const mins = Math.floor((state.weekSecondsByDay[i] || 0) / 60);
+          const barH = Math.max(8, (mins / maxMins) * (H - 55));
+          const x = i * slotW + slotW * 0.22;
+          const y = H - 32 - barH;
+          const bw = slotW * 0.56;
+
+          const grad = ctx.createLinearGradient(0, y, 0, H - 32);
+          grad.addColorStop(0, "#00F0FF");
+          grad.addColorStop(1, "#10B981");
+          ctx.fillStyle = mins > 0 ? grad : "#16223B";
+          ctx.beginPath();
+          ctx.roundRect(x, y, bw, barH, 8);
+          ctx.fill();
+
+          ctx.fillStyle = "#94A3B8";
+          ctx.font = "bold 16px sans-serif";
+          ctx.textAlign = "center";
+          ctx.fillText(lbl, i * slotW + slotW / 2, H - 8);
+        });
+      }
+
+      // 2. Gráfico Donut por Disciplina
+      const donutC = document.getElementById("subjectDonutChart");
+      if (donutC) {
+        const ctx = donutC.getContext("2d");
+        const cx = 120, cy = 120, r = 82;
+        ctx.clearRect(0, 0, 240, 240);
+
+        const totalSubjMins = state.subjects.reduce((acc, s) => acc + Math.max(1, s.studiedMins || Math.round(s.weight * 60)), 0);
+        let startAng = -Math.PI / 2;
+
+        state.subjects.forEach(s => {
+          const val = Math.max(1, s.studiedMins || Math.round(s.weight * 60));
+          const slice = (val / totalSubjMins) * Math.PI * 2;
+          ctx.strokeStyle = s.color;
+          ctx.lineWidth = 26;
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, startAng, startAng + slice);
+          ctx.stroke();
+          startAng += slice;
+        });
+
+        const leg = document.getElementById("donutLegendBox");
+        leg.innerHTML = state.subjects.map(s => `
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <span style="color:${s.color}; font-weight:800;">● ${s.name.slice(0, 20)}</span>
+            <span style="color:#CBD5E1; font-weight:700;">${formatHM(s.studiedMins || 0)}</span>
+          </div>
+        `).join("");
+      }
+    }
+
+    // =========================================================================
+    // ABA 5: MATÉRIAS & TÓPICOS DO EDITAL
+    // =========================================================================
+    function renderSubjectsTab() {
+      document.getElementById("subjTabGoalLabel").textContent = `${state.dailyGoalHours}h`;
+      const totalGoalMins = state.dailyGoalHours * 60;
+      const box = document.getElementById("subjectsFullList");
+
+      box.innerHTML = state.subjects.map((s, idx) => {
+        const goalMins = s.customGoalMins || Math.max(15, Math.round((s.weight || 0.2) * totalGoalMins));
+        const pct = Math.min(100, Math.round(((s.studiedMins || 0) / goalMins) * 100));
+        const topics = s.topics || ["Teoria Base & Resumo", "Bateria de Questões", "Revisão Espaçada"];
+
+        const topicsHtml = topics.map((t, tIdx) => {
+          const key = `${s.name}_${tIdx}`;
+          const isDone = !!state.doneTopics[key];
+          return `
+            <div onclick="toggleSyllabusTopic('${key}')" style="display:flex; align-items:center; gap:8px; padding:7px 10px; background:#070C18; border-radius:10px; margin-top:5px; cursor:pointer; font-size:12px;">
+              <span>${isDone ? '✅' : '⬜'}</span>
+              <span style="${isDone ? 'text-decoration:line-through; color:#64748B;' : 'color:#E2E8F0;'}">${t}</span>
+            </div>
+          `;
+        }).join("");
+
+        return `
+          <div class="cosmic-card" style="border-left: 4px solid ${s.color};">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+              <div>
+                <div style="font-weight:900; font-size:16px; color:#FFF;">${s.name}</div>
+                <div style="font-size:11.5px; color:var(--muted); margin-top:2px;">Hoje: <strong style="color:${s.color};">${formatHM(s.studiedMins || 0)}</strong> / Meta: ${formatHM(goalMins)} (${pct}%)</div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <button class="top-icon-btn" onclick="addManualSubjectMins(${idx}, 30)">+30m</button>
+                <button class="top-icon-btn status-pill-active" onclick="startFocusOnSubject(${idx})">▶ Focar</button>
+              </div>
+            </div>
+
+            <div style="height:7px; background:#152238; border-radius:999px; overflow:hidden; margin:10px 0;">
+              <div style="height:100%; width:${pct}%; background:${s.color}; border-radius:999px;"></div>
+            </div>
+
+            <div style="margin-top:8px;">
+              <div style="font-size:11px; font-weight:800; color:#94A3B8;">📋 TÓPICOS DO EDITAL:</div>
+              ${topicsHtml}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleSyllabusTopic(key) {
+      state.doneTopics[key] = !state.doneTopics[key];
+      saveState();
+      renderSubjectsTab();
+    }
+
+    function addManualSubjectMins(idx, mins) {
+      // Adiciona apenas na matéria pessoal (não altera o VerifiedSecondsToday dos Grupos!)
+      state.subjects[idx].studiedMins = (state.subjects[idx].studiedMins || 0) + mins;
+      saveState();
+      refreshAllUI();
+    }
+
+    function startFocusOnSubject(idx) {
+      state.selectedSubjectIdx = idx;
+      saveState();
+      refreshAllUI();
+      switchTab("foco", document.querySelector(".nav-btn"));
+      if (!isRunning) toggleFocusTimer();
+    }
+
+    function createNewSubject() {
+      const name = document.getElementById("newSubjName").value.trim();
+      const goal = parseInt(document.getElementById("newSubjGoalMins").value, 10) || 60;
+      if (!name) return;
+      const colors = ["#00F0FF", "#10B981", "#A855F7", "#F59E0B", "#F43F5E"];
+      state.subjects.push({
+        name,
+        weight: 0.2,
+        customGoalMins: goal,
+        color: colors[state.subjects.length % colors.length],
+        studiedMins: 0,
+        topics: ["Teoria & Conceitos", "Lista de Exercícios", "Revisão de Erros"]
+      });
+      document.getElementById("newSubjName").value = "";
+      saveState();
+      refreshAllUI();
+      closeModal("newSubjectModal");
+    }
+
+    // =========================================================================
+    // KITS DE ESTUDO & TUTORIAL INTERATIVO 4 ETAPAS
+    // =========================================================================
+    function selectDailyGoalHours(hrs, btn) {
+      state.dailyGoalHours = hrs;
+      document.querySelectorAll("#kitGoalHoursRow .seg-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      saveState();
+      refreshAllUI();
+    }
+
+    function applyStudyKit(kitKey) {
+      const k = KITS_DATA[kitKey] || KITS_DATA.enem;
+      state.subjects = JSON.parse(JSON.stringify(k.subjects));
+      state.dDayTitle = k.dDay;
+      state.selectedSubjectIdx = 0;
+      saveState();
+      refreshAllUI();
+      closeModal("kitsModal");
+    }
+
+    const TUTORIAL_SLIDES = [
+      {
+        badge: "MÓDULO 01 • MOTOR ESPACIAL 3D",
+        title: "Estude e Viaje pelo Sistema Solar",
+        desc: "Cada minuto de foco impulsiona sua sonda espacial em 60fps — saia da órbita da Terra, atravesse os anéis de Saturno e alcance o espaço interestelar.",
+        bullets: [
+          "🪐 Escolha a matéria antes de dar Play para registrar no lugar certo",
+          "〰️ Pulso orbital com ondas senoidais duplas em tempo real",
+          "🔊 Ruído Marrom e Chuva Espacial integrados para blindar sua atenção"
+        ]
+      },
+      {
+        badge: "MÓDULO 02 • PLANEJADOR & GRADE 24H",
+        title: "Controle Cirúrgico da sua Rotina",
+        desc: "Planeje seus 7 dias da semana na Grade 24h inteligente e acompanhe a contagem regressiva para o seu Dia D.",
+        bullets: [
+          "⚡ Botões '+30m' e 'Hora Atual' para pintar blocos com 1 toque",
+          "📋 Checklist de tarefas e metas diárias com progresso",
+          "🎒 Kits prontos para ENEM, ITA/IME, Medicina e Concursos"
+        ]
+      },
+      {
+        badge: "MÓDULO 03 • GRUPOS AO VIVO & ANTI-CHEAT",
+        title: "Estude em Esquadrão em Tempo Real",
+        desc: "Sincronizado na nuvem com o app Android. Apenas minutos reais do cronômetro entram no ranking dos grupos.",
+        bullets: [
+          "🟢 Veja quem está estudando agora e qual matéria está em foco",
+          "📸 Gere Cards Full HD (1080x1920) para postar nos Stories/Status",
+          "🔒 Sistema Anti-Cheat: horas manuais não inflam o ranking"
+        ]
+      },
+      {
+        badge: "MÓDULO 04 • ESTATÍSTICAS & EDITAL",
+        title: "Telemetria Completa da sua Aprovação",
+        desc: "Acompanhe gráficos semanais, distribuição Donut por disciplina e os tópicos concluídos de cada matéria.",
+        bullets: [
+          "📊 Rendimento semanal e gráfico Donut em tempo real",
+          "📲 No iPhone: Compartilhar ➔ Adicionar à Tela de Início",
+          "💬 Central de Feedback direta com o desenvolvedor"
+        ]
+      }
+    ];
+    let tutIndex = 0;
+
+    function renderTutorialSlide() {
+      const s = TUTORIAL_SLIDES[tutIndex];
+      document.getElementById("tutBadge").textContent = s.badge;
+      document.getElementById("tutTitle").textContent = s.title;
+      document.getElementById("tutDesc").textContent = s.desc;
+      document.getElementById("tutBulletsBox").innerHTML = s.bullets.map(b => `
+        <div style="background:#0B1426; border:1px solid #1E293B; border-radius:12px; padding:9px 12px; font-size:12px; font-weight:600; color:#E2E8F0;">${b}</div>
+      `).join("");
+      document.getElementById("tutNextBtn").textContent = tutIndex < TUTORIAL_SLIDES.length - 1 ? "Próximo ➔" : "Decolar Agora 🚀";
+    }
+
+    function nextTutorialSlide() {
+      if (tutIndex < TUTORIAL_SLIDES.length - 1) {
+        tutIndex++;
+        renderTutorialSlide();
+      } else {
+        localStorage.setItem("estudancia_tut_seen_v24", "1");
+        closeModal("tutorialModal");
+      }
+    }
+
+    function prevTutorialSlide() {
+      if (tutIndex > 0) {
+        tutIndex--;
+        renderTutorialSlide();
+      }
+    }
+
+    function drawTutorialCanvas() {
+      const c = document.getElementById("tutorialOrbitCanvas");
+      if (!c) return;
+      const ctx = c.getContext("2d");
+      const cx = c.width / 2, cy = c.height / 2;
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      const aura = ctx.createRadialGradient(cx, cy, 10, cx, cy, 90);
+      aura.addColorStop(0, "rgba(0, 240, 255, 0.35)");
       aura.addColorStop(1, "transparent");
       ctx.fillStyle = aura;
-      ctx.beginPath(); ctx.arc(cx, cy, 175, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx, cy, 90, 0, Math.PI * 2); ctx.fill();
 
-      // Anel Orbital
-      ctx.strokeStyle = "rgba(0, 240, 255, 0.35)";
-      ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.arc(cx, cy, 128, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = "rgba(0, 240, 255, 0.4)";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(cx, cy, 62, 0, Math.PI * 2); ctx.stroke();
 
-      // Planeta 3D
-      const sphere = ctx.createRadialGradient(cx - 24, cy - 24, 12, cx, cy, 78);
-      sphere.addColorStop(0, "#38BDF8");
-      sphere.addColorStop(0.55, "#1D4ED8");
-      sphere.addColorStop(1, "#061024");
+      const sphere = ctx.createRadialGradient(cx - 12, cy - 12, 4, cx, cy, 36);
+      sphere.addColorStop(0, "#67E8F9");
+      sphere.addColorStop(0.6, "#0284C7");
+      sphere.addColorStop(1, "#082F49");
       ctx.fillStyle = sphere;
-      ctx.beginPath(); ctx.arc(cx, cy, 76, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx, cy, 36, 0, Math.PI * 2); ctx.fill();
 
-      // Lua orbitando
-      orbitAngle += isRunning ? 0.025 : 0.008;
-      const mx = cx + Math.cos(orbitAngle) * 128;
-      const my = cy + Math.sin(orbitAngle) * 128;
-      ctx.fillStyle = "#FFFFFF";
-      ctx.beginPath(); ctx.arc(mx, my, 9, 0, Math.PI * 2); ctx.fill();
-
-      requestAnimationFrame(drawOrbitLoop);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(-0.38);
+      ctx.strokeStyle = "#00F0FF";
+      ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.ellipse(0, 0, 56, 14, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
     }
+
+    // =========================================================================
+    // CENTRAL DE FEEDBACK -> FIREBASE
+    // =========================================================================
+    let feedbackStars = 5;
+    function setFeedbackStars(n) {
+      feedbackStars = n;
+      const spans = document.querySelectorAll("#starRatingRow span");
+      spans.forEach((sp, i) => sp.style.opacity = i < n ? "1" : "0.25");
+    }
+
+    async function submitCloudFeedback() {
+      const msg = document.getElementById("feedbackText").value.trim();
+      const cat = document.getElementById("feedbackCategory").value;
+      const contact = document.getElementById("feedbackContact").value.trim();
+      if (msg.length < 4) return alert("Escreva sua mensagem antes de enviar!");
+
+      const id = `fb_web_${Date.now()}`;
+      const payload = {
+        id,
+        userId: state.userId,
+        userName: state.userName,
+        category: cat,
+        ratingStars: feedbackStars,
+        message: msg,
+        contact: contact || "Não informado",
+        device: navigator.userAgent,
+        appVersion: "2.4.0 Web/iOS PWA",
+        timestamp: Date.now()
+      };
+
+      try {
+        await fetch(`${FIREBASE_URL}/feedbacks/${id}.json`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (_) {}
+
+      document.getElementById("feedbackText").value = "";
+      closeModal("feedbackModal");
+      alert("🚀 Feedback salvo no banco de dados! Muito obrigado!");
+    }
+
+    // Navegação & Modais
+    function switchTab(tabId, btnEl) {
+      document.querySelectorAll(".tab-screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(`tab-${tabId}`).classList.add("active");
+      document.querySelectorAll(".bottom-dock .nav-btn").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      if (tabId === "grupos") syncFirebaseRoom();
+      if (tabId === "estatisticas") renderStatisticsTab();
+    }
+
+    function openModal(id) {
+      if (id === "tutorialModal") renderTutorialSlide();
+      document.getElementById(id).classList.add("open");
+    }
+    function closeModal(id) { document.getElementById(id).classList.remove("open"); }
 
     // Inicialização
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
-    document.getElementById("inputUserName").value = appState.userName;
-    document.getElementById("inputUserStatus").value = appState.userStatus;
-    updateUI();
-    renderGrid24h();
-    renderTasks();
-    drawOrbitLoop();
+    document.getElementById("inputProfileName").value = state.userName;
+    document.getElementById("inputProfileStatus").value = state.userStatus;
+    refreshAllUI();
+    renderCosmicCanvasLoop();
     syncFirebaseRoom();
     setInterval(syncFirebaseRoom, 15000);
+
+    if (!localStorage.getItem("estudancia_tut_seen_v24")) {
+      openModal("tutorialModal");
+    }
   </script>
 </body>
 </html>
