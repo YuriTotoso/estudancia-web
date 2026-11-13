@@ -1,0 +1,18 @@
+{
+  "name": "Organizancia Estudancia",
+  "short_name": "Estudancia",
+  "description": "Cronômetro espacial, grade 24h e salas de estudo ao vivo sem telemetria.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#040814",
+  "theme_color": "#040814",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
