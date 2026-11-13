@@ -12,9 +12,10 @@
   <title>Organizancia Estudancia v2.4.0</title>
   <style>
     :root {
-      --bg-deep: #050914;
-      --bg-card: #080F1E;
-      --bg-dock: #0B1325;
+      --bg-top: #0B1936;
+      --bg-mid: #050914;
+      --bg-bot: #03060E;
+      --card-alpha: 0.90;
       --border: #1E293B;
       --cyan: #00F0FF;
       --emerald: #10B981;
@@ -35,12 +36,13 @@
 
     body {
       margin: 0;
-      background: radial-gradient(circle at 65% 22%, #0B1936 0%, #050914 55%, #03060E 100%);
+      background: radial-gradient(circle at 65% 20%, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bot) 100%);
       color: var(--text);
       min-height: 100dvh;
       padding-top: calc(70px + env(safe-area-inset-top));
       padding-bottom: calc(98px + env(safe-area-inset-bottom));
       overflow-x: hidden;
+      transition: background 0.35s ease;
     }
 
     #starfieldCanvas {
@@ -124,7 +126,9 @@
 
     /* BENTO / COSMIC GLASS CARDS */
     .bento-card {
-      background: linear-gradient(160deg, #070D1B 0%, #0A152C 50%, #060B18 100%);
+      background: linear-gradient(160deg, rgba(7, 13, 27, var(--card-alpha)) 0%, rgba(10, 21, 44, var(--card-alpha)) 50%, rgba(6, 11, 24, var(--card-alpha)) 100%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border: 1.5px solid #1E293B;
       border-radius: 30px;
       padding: 20px;
@@ -164,6 +168,7 @@
       font-weight: 800;
       cursor: pointer;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .seg-item.active {
       background: var(--accent);
@@ -171,13 +176,7 @@
       font-weight: 900;
     }
 
-    /* HERO SECTION (EXACT REPLICA OF SCREENSHOT 1) */
-    .hero-top-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
+    /* HERO SECTION (EXACT REPLICA OF WIDGET) */
     .hero-split {
       display: flex;
       justify-content: space-between;
@@ -248,9 +247,10 @@
       border-radius: 999px;
       font-size: 11px;
       font-weight: 800;
+      white-space: nowrap;
     }
 
-    /* LIVE HUD NOTIFICATION & SINE-WAVE STRIP (REPLICA OF SCREENSHOT 2) */
+    /* LIVE HUD NOTIFICATION & SINE-WAVE STRIP */
     .live-hud-box {
       margin: 16px 0 14px;
       background: #070D19;
@@ -309,7 +309,7 @@
       cursor: pointer;
     }
 
-    /* WEEKLY FREQUENCY DOCK (EXACT REPLICA OF SCREENSHOT 1 BOTTOM DOCK) */
+    /* WEEKLY FREQUENCY DOCK */
     .weekly-dock-card {
       background: #0B1325;
       border: 1.5px solid #1E293B;
@@ -468,9 +468,7 @@
     }
     .bnav-icon { display: block; font-size: 17px; margin-bottom: 2px; }
 
-    /* =========================================================================
-       FULL-SCREEN HUD ONBOARDING TUTORIAL (EXACT REPLICA OF SCREENSHOT 3)
-       ========================================================================= */
+    /* FULL-SCREEN HUD ONBOARDING TUTORIAL */
     .hud-tutorial-screen {
       display: none;
       position: fixed;
@@ -641,25 +639,26 @@
     <div class="top-btn-group">
       <button class="glass-pill-btn" onclick="openHudTutorial()" title="Tutorial 3D">ℹ️</button>
       <button class="glass-pill-btn" onclick="openModal('kitsModal')" title="Kits">🎒</button>
-      <button class="glass-pill-btn" onclick="openModal('settingsModal')" title="Configurações & Feedback">⚙️</button>
-      <button class="glass-pill-btn cta-active-pill" id="topFocusStatusBtn" onclick="toggleFocusTimer()">⚡ Ativo</button>
+      <button class="glass-pill-btn" onclick="openModal('settingsModal')" title="Personalização, Backup & Feedback">⚙️</button>
+      <button class="glass-pill-btn cta-active-pill" id="topFocusStatusBtn" onclick="toggleFocusTimer()">▶ Focar</button>
     </div>
   </header>
 
   <main class="app-container">
 
     <!-- =====================================================================
-         ABA 1: FOCO (1:1 REPLICA OF WIDGET + LIVE WAVE HUD + AMBIENT SOUND)
+         ABA 1: FOCO (WIDGET REPLICA + LIVE WAVE HUD + AMBIENT SOUND)
          ===================================================================== -->
     <section id="tab-foco" class="tab-pane active">
 
       <div class="seg-bar">
         <button class="seg-item active" id="mode-free" onclick="setFocusMode('free')">⏱️ Livre</button>
-        <button class="seg-item" id="mode-pomo25" onclick="setFocusMode('pomo25')">🍅 Pomodoro 25m</button>
+        <button class="seg-item" id="mode-pomo25" onclick="setFocusMode('pomo25')">🍅 Pomo 25m</button>
         <button class="seg-item" id="mode-pomo50" onclick="setFocusMode('pomo50')">🔥 Deep 50m</button>
+        <button class="seg-item" id="mode-custom" onclick="promptCustomPomodoro()">⚙️ Custom</button>
       </div>
 
-      <!-- BENTO CARD (REPLICA OF SCREENSHOT 1) -->
+      <!-- BENTO CARD -->
       <div class="bento-card neon-border">
         <div class="top-neon-line"></div>
 
@@ -667,7 +666,7 @@
         <div class="hero-split">
           <div class="hero-left-col">
             <div class="tempo-foco-label">TEMPO DE FOCO HOJE</div>
-            <div class="giant-time-text" id="heroStudiedTodayText">0h 01m</div>
+            <div class="giant-time-text" id="heroStudiedTodayText">0h 00m</div>
             <div class="meta-green-line" id="heroGoalSubText">🎯 Meta 4h • 0% concluído</div>
 
             <select id="activeSubjectPicker" class="subject-pill-select" onchange="onSelectActiveSubject()"></select>
@@ -679,11 +678,11 @@
           </div>
         </div>
 
-        <!-- LIVE HUD NOTIFICATION REPLICA (SCREENSHOT 2) -->
+        <!-- LIVE HUD NOTIFICATION REPLICA -->
         <div class="live-hud-box">
           <div class="hud-top-row">
             <span id="hudSubjectTitle" style="color:#FFF;">🟢 Matemática & Suas Tecnologias</span>
-            <span id="hudLiveStopwatch" style="color:var(--cyan); font-family:monospace; font-size:14.5px;">00:00:00</span>
+            <span id="hudLiveStopwatch" style="color:var(--cyan); font-family:monospace; font-size:15px;">00:00:00</span>
           </div>
 
           <!-- Dual-Helix Sine Wave with Glowing Orb -->
@@ -700,21 +699,22 @@
           </div>
         </div>
 
-        <!-- Neural Audio Synthesizer + Focus Shield Row -->
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; background:#091120; border:1px solid #1E293B; border-radius:16px; padding:9px 12px;">
-          <span style="font-size:11px; font-weight:800; color:#94A3B8;">🔊 Imersão:</span>
+        <!-- Neural Audio Synthesizer Row -->
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; background:#091120; border:1px solid #1E293B; border-radius:16px; padding:9px 12px; overflow-x:auto;">
+          <span style="font-size:11px; font-weight:800; color:#94A3B8; white-space:nowrap;">🔊 Áudio:</span>
           <div style="display:flex; gap:5px;">
             <button class="glass-pill-btn" id="aud-off" style="border-color:var(--cyan); color:var(--cyan);" onclick="setNeuralAudio('off')">Mudo</button>
             <button class="glass-pill-btn" id="aud-brown" onclick="setNeuralAudio('brown')">🪐 Marrom</button>
             <button class="glass-pill-btn" id="aud-rain" onclick="setNeuralAudio('rain')">🌧️ Chuva</button>
+            <button class="glass-pill-btn" id="aud-alpha" onclick="setNeuralAudio('alpha')">🧠 Binaural</button>
           </div>
         </div>
 
-        <!-- WEEKLY FREQUENCY DOCK (EXACT REPLICA OF SCREENSHOT 1) -->
+        <!-- WEEKLY FREQUENCY DOCK -->
         <div class="weekly-dock-card">
           <div class="weekly-dock-top">
             <span>FREQUÊNCIA NA SEMANA</span>
-            <span style="color:var(--cyan);" id="weekActiveRatioText">1/7 dias ativos</span>
+            <span style="color:var(--cyan);" id="weekActiveRatioText">0/7 dias ativos</span>
           </div>
           <div class="week-capsules-row" id="weekCapsulesContainer"></div>
         </div>
@@ -772,7 +772,7 @@
     </section>
 
     <!-- =====================================================================
-         ABA 3: GRUPOS AO VIVO (FIREBASE + ANTI-CHEAT + STORY CARD 1080x1920)
+         ABA 3: GRUPOS AO VIVO (MULTI-USUÁRIO ISOLADO + ANTI-CHEAT + STORY CARD)
          ===================================================================== -->
     <section id="tab-grupos" class="tab-pane">
 
@@ -781,7 +781,7 @@
       <div class="bento-card neon-border">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-size:11.5px; color:var(--muted); font-weight:700;" id="roomSubHeader">Alta Performance • Auditado pelo Cronômetro</span>
-          <span style="background:#06281E; border:1px solid rgba(16,185,129,0.5); color:var(--emerald); padding:3px 10px; border-radius:999px; font-size:11px; font-weight:800;" id="roomOnlineCount">🟢 1 estudando</span>
+          <span style="background:#06281E; border:1px solid rgba(16,185,129,0.5); color:var(--emerald); padding:3px 10px; border-radius:999px; font-size:11px; font-weight:800;" id="roomOnlineCount">🟢 0 estudando</span>
         </div>
 
         <div style="font-size:19px; font-weight:900; margin:8px 0 12px;" id="roomMainTitle">Foco Total — Vestibulares & ENEM</div>
@@ -836,7 +836,7 @@
 
       <div class="bento-card">
         <div style="font-weight:900; font-size:15.5px; margin-bottom:4px;">📊 Rendimento nos 7 Dias da Semana</div>
-        <div style="font-size:11.5px; color:var(--muted); margin-bottom:10px;"> Evolução diária em relação à meta de <span id="statGoalH">4h</span>/dia</div>
+        <div style="font-size:11.5px; color:var(--muted); margin-bottom:10px;">Evolução diária em relação à meta de <span id="statGoalH">4h</span>/dia</div>
         <canvas id="statsBarCanvas" width="520" height="210" style="width:100%; height:165px; display:block;"></canvas>
       </div>
 
@@ -887,7 +887,7 @@
   </nav>
 
   <!-- =========================================================================
-       FULL-SCREEN HUD TUTORIAL (1:1 REPLICA OF TABLET PHOTO - SOURCE 3)
+       FULL-SCREEN HUD TUTORIAL
        ========================================================================= -->
   <div class="hud-tutorial-screen" id="hudTutorialScreen">
     <div class="hud-top-bar">
@@ -932,7 +932,7 @@
     <div class="modal-glass-sheet">
       <div class="top-neon-line"></div>
       <div style="font-weight:900; font-size:18px; margin-bottom:4px;" id="qtModalTitle">⏱️ Ajustar Tempo da Matéria</div>
-      <div style="font-size:12px; color:var(--muted); margin-bottom:14px;">Atualiza seu progresso pessoal (não altera o ranking auditado dos Grupos):</div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:14px;">Atualiza seu progresso pessoal na disciplina (não altera o ranking auditado dos Grupos):</div>
       <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:14px;">
         <button class="btn-sub-dark" onclick="applyQuickSubjectTime(15)">+15 min</button>
         <button class="btn-sub-dark" onclick="applyQuickSubjectTime(30)">+30 min</button>
@@ -1004,31 +1004,40 @@
   <div class="modal-backdrop" id="profileModal">
     <div class="modal-glass-sheet">
       <div class="top-neon-line"></div>
-      <div style="font-weight:900; font-size:18px; margin-bottom:10px;">✏️ Perfil & Código da Sala</div>
+      <div style="font-weight:900; font-size:18px; margin-bottom:6px;" id="profileModalHeader">👋 Seu Perfil nos Grupos</div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:12px;">Escolha como seu nome e sua meta vão aparecer no ranking ao vivo (cada aparelho tem ID próprio e isolado):</div>
       <label style="font-size:12px; color:var(--muted);">Seu Nome ou Apelido</label>
       <input type="text" id="profNameInp" placeholder="Ex: Pedro • ITA" maxlength="24" />
       <label style="font-size:12px; color:var(--muted);">Sua Meta / Frase de Status</label>
       <input type="text" id="profStatusInp" placeholder="Ex: 🚀 Rumo à aprovação!" maxlength="55" />
-      <label style="font-size:12px; color:var(--muted);">Criar ou Entrar em Código de Sala</label>
+      <label style="font-size:12px; color:var(--muted);">Criar ou Entrar em Código de Sala (Opcional)</label>
       <input type="text" id="profRoomInp" placeholder="Ex: ENEM-2026 ou ITA-AERO" maxlength="14" />
       <div class="action-btn-row">
-        <button class="btn-sub-dark" onclick="closeModal('profileModal')">Cancelar</button>
-        <button class="btn-main-emerald" onclick="saveProfileChanges()">Salvar 🚀</button>
+        <button class="btn-sub-dark" onclick="closeModal('profileModal')">Fechar</button>
+        <button class="btn-main-emerald" onclick="saveProfileChanges()">Salvar Perfil 🚀</button>
       </div>
     </div>
   </div>
 
   <!-- =========================================================================
-       MODAL: ADICIONAR MATÉRIA
+       MODAL: ADICIONAR MATÉRIA COM SELETOR DE COR
        ========================================================================= -->
   <div class="modal-backdrop" id="addSubjectModal">
     <div class="modal-glass-sheet">
       <div class="top-neon-line"></div>
       <div style="font-weight:900; font-size:18px; margin-bottom:10px;">📚 Nova Disciplina</div>
       <label style="font-size:12px; color:var(--muted);">Nome da Matéria</label>
-      <input type="text" id="addSubjNameInp" placeholder="Ex: Física Quântica & Moderna" />
+      <input type="text" id="addSubjNameInp" placeholder="Ex: Física Moderna & Óptica" />
       <label style="font-size:12px; color:var(--muted);">Meta Diária (Minutos)</label>
       <input type="number" id="addSubjMinsInp" value="60" min="15" max="360" />
+      <label style="font-size:12px; color:var(--muted);">Cor da Disciplina</label>
+      <div style="display:flex; gap:10px; margin:6px 0 14px;" id="newSubjColorRow">
+        <div onclick="pickNewSubjColor('#00F0FF', this)" style="width:32px; height:32px; border-radius:50%; background:#00F0FF; border:2.5px solid #FFF; cursor:pointer;"></div>
+        <div onclick="pickNewSubjColor('#10B981', this)" style="width:32px; height:32px; border-radius:50%; background:#10B981; cursor:pointer;"></div>
+        <div onclick="pickNewSubjColor('#A855F7', this)" style="width:32px; height:32px; border-radius:50%; background:#A855F7; cursor:pointer;"></div>
+        <div onclick="pickNewSubjColor('#F59E0B', this)" style="width:32px; height:32px; border-radius:50%; background:#F59E0B; cursor:pointer;"></div>
+        <div onclick="pickNewSubjColor('#F43F5E', this)" style="width:32px; height:32px; border-radius:50%; background:#F43F5E; cursor:pointer;"></div>
+      </div>
       <div class="action-btn-row">
         <button class="btn-sub-dark" onclick="closeModal('addSubjectModal')">Cancelar</button>
         <button class="btn-main-emerald" onclick="addCustomSubject()">Criar Matéria ✨</button>
@@ -1037,41 +1046,62 @@
   </div>
 
   <!-- =========================================================================
-       MODAL: CONFIGURAÇÕES, TEMA & CENTRAL DE FEEDBACK (FIREBASE)
+       MODAL: PERSONALIZAÇÃO COMPLETA, BACKUP & CENTRAL DE FEEDBACK
        ========================================================================= -->
   <div class="modal-backdrop" id="settingsModal">
     <div class="modal-glass-sheet">
       <div class="top-neon-line"></div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <span style="font-weight:900; font-size:18px;">⚙️ Configurações & Feedback</span>
+        <span style="font-weight:900; font-size:18px;">⚙️ Personalização & Sistema</span>
         <button class="glass-pill-btn" onclick="closeModal('settingsModal')">✕</button>
       </div>
 
+      <!-- 1. Cor de Destaque -->
       <div style="font-size:12px; font-weight:800; color:#CBD5E1; margin-bottom:8px;">🎨 Cor de Destaque do Tema:</div>
-      <div style="display:flex; gap:10px; margin-bottom:16px;">
-        <div onclick="setAccentColor('#FF6B2C')" style="width:34px; height:34px; border-radius:50%; background:#FF6B2C; cursor:pointer; border:2px solid #FFF;"></div>
-        <div onclick="setAccentColor('#00F0FF')" style="width:34px; height:34px; border-radius:50%; background:#00F0FF; cursor:pointer; border:2px solid #FFF;"></div>
-        <div onclick="setAccentColor('#10B981')" style="width:34px; height:34px; border-radius:50%; background:#10B981; cursor:pointer; border:2px solid #FFF;"></div>
-        <div onclick="setAccentColor('#A855F7')" style="width:34px; height:34px; border-radius:50%; background:#A855F7; cursor:pointer; border:2px solid #FFF;"></div>
+      <div style="display:flex; gap:10px; margin-bottom:14px;">
+        <div onclick="setAccentColor('#FF6B2C')" style="width:32px; height:32px; border-radius:50%; background:#FF6B2C; cursor:pointer; border:2px solid #FFF;"></div>
+        <div onclick="setAccentColor('#00F0FF')" style="width:32px; height:32px; border-radius:50%; background:#00F0FF; cursor:pointer; border:2px solid #FFF;"></div>
+        <div onclick="setAccentColor('#10B981')" style="width:32px; height:32px; border-radius:50%; background:#10B981; cursor:pointer; border:2px solid #FFF;"></div>
+        <div onclick="setAccentColor('#A855F7')" style="width:32px; height:32px; border-radius:50%; background:#A855F7; cursor:pointer; border:2px solid #FFF;"></div>
+        <div onclick="setAccentColor('#F43F5E')" style="width:32px; height:32px; border-radius:50%; background:#F43F5E; cursor:pointer; border:2px solid #FFF;"></div>
+        <div onclick="setAccentColor('#FBBF24')" style="width:32px; height:32px; border-radius:50%; background:#FBBF24; cursor:pointer; border:2px solid #FFF;"></div>
       </div>
 
-      <div style="background:#091120; border:1px solid #1E293B; border-radius:18px; padding:14px; margin-bottom:14px;">
-        <div style="font-weight:900; font-size:14px; margin-bottom:4px;">📲 Como instalar no iPhone (iOS):</div>
-        <div style="font-size:12px; color:var(--muted); line-height:1.45;">
-          No Safari, toque em <strong>Compartilhar (⬆️)</strong> ➔ <strong>Adicionar à Tela de Início</strong> para usar em tela cheia sem bordas.
-        </div>
+      <!-- 2. Modo de Fundo Espacial -->
+      <div style="font-size:12px; font-weight:800; color:#CBD5E1; margin-bottom:8px;">🌌 Atmosfera de Fundo (Background Mode):</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:14px;">
+        <button class="glass-pill-btn" style="justify-content:center; padding:9px;" onclick="setBgTheme('cosmic')">🌌 Abismo Cósmico</button>
+        <button class="glass-pill-btn" style="justify-content:center; padding:9px;" onclick="setBgTheme('oled')">⚫ OLED Puro</button>
+        <button class="glass-pill-btn" style="justify-content:center; padding:9px;" onclick="setBgTheme('nebula')">💠 Nebulosa Azul</button>
+        <button class="glass-pill-btn" style="justify-content:center; padding:9px;" onclick="setBgTheme('supernova')">🔮 Supernova Roxa</button>
       </div>
 
-      <div style="font-weight:900; font-size:15px; margin-bottom:6px;">💬 Enviar Feedback Direto pro Banco:</div>
-      <select id="fbCatSelect">
-        <option value="💡 Ideia / Sugestão">💡 Ideia / Sugestão</option>
-        <option value="🐞 Reportar Bug">🐞 Reportar Bug</option>
-        <option value="🎨 Visual / Design">🎨 Visual / Design</option>
-        <option value="⭐ Elogio">⭐ Elogio</option>
-      </select>
-      <textarea id="fbMessageInp" rows="3" placeholder="Escreva sua sugestão, elogio ou bug..."></textarea>
-      <input type="text" id="fbContactInp" placeholder="Seu @Instagram ou WhatsApp (Opcional)" />
-      <button class="btn-main-emerald" style="width:100%;" onclick="sendFeedbackToFirebase()">Enviar Feedback 🚀</button>
+      <!-- 3. Intensidade do Vidro (Glass Blur Opacity) -->
+      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:800; color:#CBD5E1;">
+        <span>✨ Transparência Cosmic Glass</span>
+        <span id="glassAlphaLabel" style="color:var(--cyan);">90%</span>
+      </div>
+      <input type="range" min="65" max="98" value="90" oninput="setGlassOpacity(this.value)" style="padding:0; margin:6px 0 14px;" />
+
+      <!-- 4. Backup / Exportar Dados -->
+      <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <button class="btn-sub-dark" style="padding:10px; font-size:12px;" onclick="exportBackupJson()">💾 Exportar Backup</button>
+        <button class="btn-sub-dark" style="padding:10px; font-size:12px;" onclick="importBackupJson()">📂 Restaurar Backup</button>
+      </div>
+
+      <!-- 5. Central de Feedback Direto pro Firebase -->
+      <div style="border-top:1px solid #1E293B; padding-top:14px;">
+        <div style="font-weight:900; font-size:15px; margin-bottom:6px;">💬 Central de Feedback (Direto pro Banco):</div>
+        <select id="fbCatSelect">
+          <option value="💡 Ideia / Sugestão">💡 Ideia / Sugestão</option>
+          <option value="🐞 Reportar Bug">🐞 Reportar Bug</option>
+          <option value="🎨 Visual / Design">🎨 Visual / Design</option>
+          <option value="⭐ Elogio">⭐ Elogio</option>
+        </select>
+        <textarea id="fbMessageInp" rows="3" placeholder="Escreva sua sugestão, elogio ou bug..."></textarea>
+        <input type="text" id="fbContactInp" placeholder="Seu @Instagram ou WhatsApp (Opcional)" />
+        <button class="btn-main-emerald" style="width:100%;" onclick="sendFeedbackToFirebase()">Enviar Feedback 🚀</button>
+      </div>
     </div>
   </div>
 
@@ -1135,17 +1165,24 @@
       return d === 0 ? 6 : d - 1;
     }
 
-    let state = JSON.parse(localStorage.getItem("estudancia_v245_state") || "null") || {
-      userId: "usr_" + Math.random().toString(36).substring(2, 11),
-      userName: "Pedro • ITA",
+    // =========================================================================
+    // MULTI-USER SAFE STATE (ID ÚNICO POR APARELHO + ZERO CONFLITO DE NOMES)
+    // =========================================================================
+    const randomStudentNum = Math.floor(100 + Math.random() * 900);
+    let state = JSON.parse(localStorage.getItem("estudancia_v246_multiuser_state") || "null") || {
+      userId: "usr_" + Math.random().toString(36).substring(2, 10) + "_" + Date.now().toString(36).slice(-4),
+      userName: `Estudante #${randomStudentNum}`,
+      hasSetCustomName: false,
       userStatus: "🚀 Rumo à aprovação!",
       accentColor: "#FF6B2C",
+      bgTheme: "cosmic",
+      cardAlpha: 0.90,
       dailyGoalHours: 4,
       selectedKitId: "enem",
       dDayTitle: "ENEM / Vestibular 2026",
       dDayDate: "2026-11-15",
-      verifiedSecondsToday: 60,
-      weekSecondsByDay: [1800, 0, 60, 0, 0, 0, 0],
+      verifiedSecondsToday: 0,
+      weekSecondsByDay: [0, 0, 0, 0, 0, 0, 0],
       lastDateYmd: new Date().toISOString().slice(0, 10),
       selectedSubjectIdx: 1,
       selectedPlannerDay: getMonDayIdx(),
@@ -1168,25 +1205,79 @@
     }
 
     function saveState() {
-      localStorage.setItem("estudancia_v245_state", JSON.stringify(state));
+      localStorage.setItem("estudancia_v246_multiuser_state", JSON.stringify(state));
     }
+
+    // Personalização de Tema & Atmosfera
+    function applySavedThemeVars() {
+      document.documentElement.style.setProperty("--accent", state.accentColor || "#FF6B2C");
+      document.documentElement.style.setProperty("--card-alpha", state.cardAlpha || 0.90);
+      const themes = {
+        cosmic: ["#0B1936", "#050914", "#03060E"],
+        oled: ["#050811", "#000000", "#000000"],
+        nebula: ["#0C2D48", "#051329", "#020813"],
+        supernova: ["#2A114B", "#0D061A", "#040208"]
+      };
+      const t = themes[state.bgTheme || "cosmic"] || themes.cosmic;
+      document.documentElement.style.setProperty("--bg-top", t[0]);
+      document.documentElement.style.setProperty("--bg-mid", t[1]);
+      document.documentElement.style.setProperty("--bg-bot", t[2]);
+    }
+    applySavedThemeVars();
 
     function setAccentColor(hex) {
       state.accentColor = hex;
-      document.documentElement.style.setProperty("--accent", hex);
+      applySavedThemeVars();
       saveState();
       renderAll();
     }
-    document.documentElement.style.setProperty("--accent", state.accentColor || "#FF6B2C");
+    function setBgTheme(mode) {
+      state.bgTheme = mode;
+      applySavedThemeVars();
+      saveState();
+    }
+    function setGlassOpacity(val) {
+      state.cardAlpha = (parseInt(val, 10) / 100).toFixed(2);
+      document.getElementById("glassAlphaLabel").textContent = `${val}%`;
+      applySavedThemeVars();
+      saveState();
+    }
 
     // =========================================================================
-    // CRONÔMETRO REAL + ANTI-CHEAT VERIFIED TRACKER
+    // 6 NÍVEIS REAIS DO SISTEMA SOLAR (RESOLVE PLANET STAGE)
+    // =========================================================================
+    function resolveSolarStage(mins) {
+      if (mins < 30) return { level: 1, name: "🌍 Nível 1 • Terra", full: "🌍 Terra & Órbita Terrestre", light: "#38BDF8", dark: "#1D4ED8", atmo: "#00F0FF", rings: false };
+      if (mins < 60) return { level: 2, name: "🌕 Nível 2 • Lua", full: "🌕 Órbita Lunar", light: "#E2E8F0", dark: "#475569", atmo: "#94A3B8", rings: false };
+      if (mins < 120) return { level: 3, name: "🔴 Nível 3 • Marte", full: "🔴 Marte & Horizonte Vermelho", light: "#FB923C", dark: "#9A3412", atmo: "#F97316", rings: false };
+      if (mins < 200) return { level: 4, name: "🟠 Nível 4 • Júpiter", full: "🟠 Gigante Gasoso Júpiter", light: "#FBBF24", dark: "#92400E", atmo: "#F59E0B", rings: false };
+      if (mins < 300) return { level: 5, name: "🪐 Nível 5 • Saturno", full: "🪐 Anéis de Saturno", light: "#FDE68A", dark: "#78350F", atmo: "#FBBF24", rings: true };
+      return { level: 6, name: "🌌 Nível 6 • Interestelar", full: "🌌 Espaço Interestelar", light: "#E879F9", dark: "#581C87", atmo: "#A855F7", rings: true };
+    }
+
+    // =========================================================================
+    // CRONÔMETRO ANTI-CONGELAMENTO (TIMESTAMP DELTA + WAKELOCK API)
     // =========================================================================
     let focusMode = "free";
     let sessionSecs = 0;
     let pomoTargetSecs = 25 * 60;
     let isRunning = false;
     let timerId = null;
+    let lastTickTimestampMs = null;
+    let uncreditedSubjectSeconds = 0;
+    let wakeLockObj = null;
+
+    async function requestScreenWakeLock() {
+      if ("wakeLock" in navigator && isRunning) {
+        try { wakeLockObj = await navigator.wakeLock.request("screen"); } catch (_) {}
+      }
+    }
+    function releaseScreenWakeLock() {
+      if (wakeLockObj) {
+        try { wakeLockObj.release(); } catch (_) {}
+        wakeLockObj = null;
+      }
+    }
 
     function fmtHMS(s) {
       const h = String(Math.floor(s / 3600)).padStart(2, "0");
@@ -1201,12 +1292,64 @@
     function setFocusMode(m) {
       if (isRunning) toggleFocusTimer();
       focusMode = m;
-      ["free", "pomo25", "pomo50"].forEach(k => document.getElementById(`mode-${k}`).classList.toggle("active", k === m));
+      ["free", "pomo25", "pomo50", "custom"].forEach(k => {
+        const el = document.getElementById(`mode-${k}`);
+        if (el) el.classList.toggle("active", k === m);
+      });
       if (m === "pomo25") pomoTargetSecs = 25 * 60;
       if (m === "pomo50") pomoTargetSecs = 50 * 60;
       sessionSecs = 0;
       renderAll();
     }
+
+    function promptCustomPomodoro() {
+      const mins = prompt("Quantos minutos para o ciclo de foco personalizado?", "40");
+      const parsed = parseInt(mins, 10);
+      if (parsed && parsed > 0 && parsed <= 240) {
+        setFocusMode("custom");
+        pomoTargetSecs = parsed * 60;
+        document.getElementById("mode-custom").textContent = `⚙️ ${parsed}m`;
+        renderAll();
+      }
+    }
+
+    function processElapsedDelta() {
+      if (!isRunning || !lastTickTimestampMs) return;
+      const now = Date.now();
+      const deltaSecs = Math.floor((now - lastTickTimestampMs) / 1000);
+      if (deltaSecs <= 0) return;
+
+      lastTickTimestampMs += deltaSecs * 1000;
+      sessionSecs += deltaSecs;
+      state.verifiedSecondsToday += deltaSecs;
+      uncreditedSubjectSeconds += deltaSecs;
+
+      const dIdx = getMonDayIdx();
+      state.weekSecondsByDay[dIdx] = Math.max(state.weekSecondsByDay[dIdx] || 0, state.verifiedSecondsToday);
+
+      if (uncreditedSubjectSeconds >= 60) {
+        const minsToAdd = Math.floor(uncreditedSubjectSeconds / 60);
+        uncreditedSubjectSeconds %= 60;
+        const subj = state.subjects[state.selectedSubjectIdx];
+        if (subj) subj.studiedMins = (subj.studiedMins || 0) + minsToAdd;
+      }
+
+      if (focusMode !== "free" && sessionSecs >= pomoTargetSecs) {
+        finishAndBankSession();
+        alert("🚀 Ciclo Pomodoro concluído! Tempo creditado na sua sonda.");
+        return;
+      }
+      saveState();
+      updateLiveTimerDOM();
+    }
+
+    // Se o usuário bloquear o iPhone ou trocar de app e voltar, recalcula na hora!
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && isRunning) {
+        processElapsedDelta();
+        requestScreenWakeLock();
+      }
+    });
 
     function toggleFocusTimer() {
       isRunning = !isRunning;
@@ -1214,29 +1357,16 @@
       const topBtn = document.getElementById("topFocusStatusBtn");
 
       if (isRunning) {
+        lastTickTimestampMs = Date.now();
+        requestScreenWakeLock();
         playBtn.textContent = "⏸ Pausar";
         playBtn.style.background = "linear-gradient(135deg, #F59E0B, #EA580C)";
         topBtn.textContent = "⚡ Ativo";
-        timerId = setInterval(() => {
-          sessionSecs++;
-          state.verifiedSecondsToday++;
-          const dIdx = getMonDayIdx();
-          state.weekSecondsByDay[dIdx] = Math.max(state.weekSecondsByDay[dIdx] || 0, state.verifiedSecondsToday);
-
-          if (sessionSecs % 60 === 0) {
-            const subj = state.subjects[state.selectedSubjectIdx];
-            if (subj) subj.studiedMins = (subj.studiedMins || 0) + 1;
-          }
-
-          if (focusMode !== "free" && sessionSecs >= pomoTargetSecs) {
-            finishAndBankSession();
-            alert("🚀 Ciclo Pomodoro concluído! Tempo creditado na sua sonda.");
-            return;
-          }
-          saveState();
-          updateLiveTimerDOM();
-        }, 1000);
+        timerId = setInterval(processElapsedDelta, 1000);
       } else {
+        processElapsedDelta();
+        lastTickTimestampMs = null;
+        releaseScreenWakeLock();
         playBtn.textContent = "▶ Retomar";
         playBtn.style.background = "linear-gradient(135deg, #10B981, #00D4B2)";
         topBtn.textContent = "⏸ Pausado";
@@ -1246,13 +1376,16 @@
     }
 
     function finishAndBankSession() {
+      processElapsedDelta();
       clearInterval(timerId);
       isRunning = false;
+      lastTickTimestampMs = null;
       sessionSecs = 0;
+      releaseScreenWakeLock();
       const playBtn = document.getElementById("mainPlayPauseBtn");
       playBtn.textContent = "▶ Iniciar Foco";
       playBtn.style.background = "linear-gradient(135deg, #10B981, #00D4B2)";
-      document.getElementById("topFocusStatusBtn").textContent = "⚡ Ativo";
+      document.getElementById("topFocusStatusBtn").textContent = "▶ Focar";
       saveState();
       renderAll();
       syncFirebaseRoom();
@@ -1271,6 +1404,8 @@
       const goalMins = state.dailyGoalHours * 60;
       const pct = Math.min(100, Math.round((heroDisplayMins / Math.max(1, goalMins)) * 100));
 
+      const stage = resolveSolarStage(heroDisplayMins);
+      document.getElementById("planetStageLabel").textContent = stage.name;
       document.getElementById("heroStudiedTodayText").textContent = fmtHM(heroDisplayMins);
       document.getElementById("heroGoalSubText").textContent = `🎯 Meta ${state.dailyGoalHours}h • ${pct}% concluído`;
 
@@ -1281,11 +1416,11 @@
       document.getElementById("hudSubjectTitle").textContent = `🟢 ${activeSubj.name}`;
       document.getElementById("hudLiveStopwatch").textContent = fmtHMS(shownClock);
       document.getElementById("hudTelemetryLine1").textContent = `⏱️ ${fmtHMS(sessionSecs)} líquidos • Hoje: ${fmtHM(heroDisplayMins)} / ${fmtHM(goalMins)} (${pct}%)`;
-      document.getElementById("hudTelemetryLine2").textContent = `🛰️ Sonda: 🌍 Terra & Órbita Terrestre • Meta da matéria: ${fmtHM(activeSubj.studiedMins || 0)}/${fmtHM(subjGoalMins)}`;
+      document.getElementById("hudTelemetryLine2").textContent = `🛰️ Sonda: ${stage.full} • Meta da matéria: ${fmtHM(activeSubj.studiedMins || 0)}/${fmtHM(subjGoalMins)}`;
     }
 
     // =========================================================================
-    // 120FPS CANVAS ENGINE: STARFIELD + 3D PLANET + DUAL SINE WAVE + HUD PLANET
+    // 120FPS CANVAS ENGINE: STARFIELD + 6-STAGE 3D PLANET + SINE WAVE
     // =========================================================================
     const bgStars = Array.from({ length: 70 }, () => ({
       x: Math.random(), y: Math.random(), r: Math.random() * 1.6 + 0.5, p: Math.random() * 6.28
@@ -1306,7 +1441,7 @@
         sCtx.beginPath(); sCtx.arc(st.x * sf.width, st.y * sf.height, st.r, 0, Math.PI * 2); sCtx.fill();
       });
 
-      // 2. Hero 3D Planet (Exact replica of Screenshot 1)
+      // 2. Hero 3D Planet (Adapts to the 6 Solar System Stages)
       const hc = document.getElementById("heroPlanetCanvas");
       if (hc) {
         const ctx = hc.getContext("2d");
@@ -1314,13 +1449,16 @@
         ctx.clearRect(0, 0, W, H);
 
         const verifiedMins = Math.floor(state.verifiedSecondsToday / 60);
+        const totalSubjMins = state.subjects.reduce((acc, s) => acc + (s.studiedMins || 0), 0);
+        const heroMins = Math.max(verifiedMins, totalSubjMins);
+        const stage = resolveSolarStage(heroMins);
         const goalMins = state.dailyGoalHours * 60;
-        const pct = Math.min(1, verifiedMins / Math.max(1, goalMins));
+        const pct = Math.min(1, heroMins / Math.max(1, goalMins));
 
         // Atmospheric Glow
         const aura = ctx.createRadialGradient(cx, cy, 20, cx, cy, 150);
-        aura.addColorStop(0, "rgba(0, 240, 255, 0.28)");
-        aura.addColorStop(0.55, "rgba(16, 185, 129, 0.08)");
+        aura.addColorStop(0, stage.atmo + "44");
+        aura.addColorStop(0.55, stage.atmo + "14");
         aura.addColorStop(1, "transparent");
         ctx.fillStyle = aura;
         ctx.beginPath(); ctx.arc(cx, cy, 150, 0, Math.PI * 2); ctx.fill();
@@ -1342,24 +1480,34 @@
           ctx.stroke();
         }
 
-        // Top 12-o'clock Cyan Beacon Dot (From Screenshot 1)
+        // Top 12-o'clock Cyan Beacon Dot
         ctx.fillStyle = "#00F0FF";
         ctx.shadowColor = "#00F0FF";
         ctx.shadowBlur = 12;
         ctx.beginPath(); ctx.arc(cx, cy - ringR, 7, 0, Math.PI * 2); ctx.fill();
         ctx.shadowBlur = 0;
 
-        // 3D Deep Blue/Cyan Sphere with Rim Lighting
+        // 3D Planet Sphere
         const pR = 72;
         const sphere = ctx.createRadialGradient(cx - 22, cy - 22, 10, cx, cy, pR);
-        sphere.addColorStop(0, "#38BDF8");
-        sphere.addColorStop(0.45, "#2563EB");
-        sphere.addColorStop(0.82, "#0F172A");
-        sphere.addColorStop(1, "#00F0FF");
+        sphere.addColorStop(0, stage.light);
+        sphere.addColorStop(0.55, stage.dark);
+        sphere.addColorStop(0.88, "#0F172A");
+        sphere.addColorStop(1, stage.atmo);
         ctx.fillStyle = sphere;
         ctx.beginPath(); ctx.arc(cx, cy, pR, 0, Math.PI * 2); ctx.fill();
 
-        // Orbiting Moon with Soft Glow
+        if (stage.rings) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(-0.38);
+          ctx.strokeStyle = stage.atmo;
+          ctx.lineWidth = 6;
+          ctx.beginPath(); ctx.ellipse(0, 0, pR * 1.45, pR * 0.34, 0, 0, Math.PI * 2); ctx.stroke();
+          ctx.restore();
+        }
+
+        // Orbiting Moon
         const mAng = -0.35 + phase * 0.25;
         const mx = cx + Math.cos(mAng) * (pR + 18);
         const my = cy + Math.sin(mAng) * (pR + 18);
@@ -1383,7 +1531,6 @@
         const frac = Math.min(1, Math.max(0.22, verifiedMins / Math.max(1, state.dailyGoalHours * 60)));
         const splitX = padX + usableW * frac;
 
-        // Background subtle wave across full width
         wCtx.strokeStyle = "rgba(0, 240, 255, 0.22)";
         wCtx.lineWidth = 3;
         wCtx.beginPath();
@@ -1394,7 +1541,6 @@
         }
         wCtx.stroke();
 
-        // Active Secondary Helix Wave
         const neonGrad = wCtx.createLinearGradient(padX, 0, splitX, 0);
         neonGrad.addColorStop(0, "#10B981");
         neonGrad.addColorStop(0.55, "#00F0FF");
@@ -1412,7 +1558,6 @@
         wCtx.stroke();
         wCtx.globalAlpha = 1;
 
-        // Active Primary Neon Wave
         wCtx.strokeStyle = neonGrad;
         wCtx.lineWidth = 5.5;
         wCtx.lineCap = "round";
@@ -1425,7 +1570,6 @@
         }
         wCtx.stroke();
 
-        // Glowing Energy Orb at the Wave Crest
         const orbGrad = wCtx.createRadialGradient(splitX, tipY, 2, splitX, tipY, 16);
         orbGrad.addColorStop(0, "#FFFFFF");
         orbGrad.addColorStop(0.4, "#00F0FF");
@@ -1434,7 +1578,7 @@
         wCtx.beginPath(); wCtx.arc(splitX, tipY, 16, 0, Math.PI * 2); wCtx.fill();
       }
 
-      // 4. Full-Screen HUD Tutorial Ringed Planet (Exact replica of Screenshot 3)
+      // 4. Full-Screen HUD Tutorial Planet
       const tutScreen = document.getElementById("hudTutorialScreen");
       if (tutScreen && tutScreen.classList.contains("open")) {
         drawHudSolarPlanet();
@@ -1444,7 +1588,7 @@
     }
 
     // =========================================================================
-    // FULL-SCREEN HUD TUTORIAL RENDERER (EXACT REPLICA OF SCREENSHOT 3)
+    // FULL-SCREEN HUD TUTORIAL RENDERER
     // =========================================================================
     const HUD_SLIDES = [
       {
@@ -1462,13 +1606,13 @@
       {
         badge: "MÓDULO 03 • ESQUADRÃO MULTIPLAYER AO VIVO",
         title: "Ranking Blindado em Tempo Real",
-        desc: "Entre nas salas #ENEM-2026 e #ITA-AERO. Apenas o tempo líquido auditado pelo cronômetro entra no ranking, com gerador de Card Full HD para Status e Stories.",
+        desc: "Entre nas salas #ENEM-2026 e #ITA-AERO. Cada usuário tem perfil isolado, com minutos auditados pelo cronômetro e gerador de Card HD para Status/Stories.",
         telemetry: "SERVIDOR: FIREBASE RTDB  •  ANTI-CHEAT ATIVO"
       },
       {
-        badge: "MÓDULO 04 • TELEMETRIA & MAPA DE CALOR",
-        title: "Estatísticas & Controle de Edital",
-        desc: "Acompanhe seu gráfico semanal, distribuição Donut por disciplina, Heatmap de 30 dias e marque os tópicos concluídos de cada matéria.",
+        badge: "MÓDULO 04 • TELEMETRIA & PERSONALIZAÇÃO",
+        title: "Temas, Sons Neurais & Edital",
+        desc: "Personalize cores, fundo OLED/Nebulosa, ative Ruído Marrom ou Ondas Binaurais e controle cada tópico concluído do seu edital.",
         telemetry: "STATUS: PRONTO PARA DECOLAGEM 🚀"
       }
     ];
@@ -1509,7 +1653,6 @@
       const W = c.width, H = c.height, cx = W / 2, cy = H / 2;
       ctx.clearRect(0, 0, W, H);
 
-      // Outer Ticked Telemetry Ring (From Screenshot 3)
       const outerR = 165;
       ctx.strokeStyle = "rgba(0, 240, 255, 0.35)";
       ctx.lineWidth = 2;
@@ -1526,7 +1669,6 @@
         ctx.stroke();
       }
 
-      // 3D Cyan/Blue Planet Sphere
       const pR = 78;
       const sphere = ctx.createRadialGradient(cx - 24, cy - 24, 8, cx, cy, pR);
       sphere.addColorStop(0, "#A5F3FC");
@@ -1536,7 +1678,6 @@
       ctx.fillStyle = sphere;
       ctx.beginPath(); ctx.arc(cx, cy, pR, 0, Math.PI * 2); ctx.fill();
 
-      // Tilted Glowing Cyan Saturn Ring
       ctx.save();
       ctx.translate(cx, cy);
       ctx.rotate(-0.42);
@@ -1550,7 +1691,6 @@
       ctx.restore();
       ctx.shadowBlur = 0;
 
-      // Bright Moon Flare on Ring
       const flareX = cx + 18, flareY = cy + 48;
       ctx.fillStyle = "#FFFFFF";
       ctx.shadowColor = "#00F0FF";
@@ -1565,13 +1705,11 @@
     function renderAll() {
       updateLiveTimerDOM();
 
-      // Subject Picker in Hero Card
       const picker = document.getElementById("activeSubjectPicker");
       picker.innerHTML = state.subjects.map((s, i) =>
         `<option value="${i}" ${i === state.selectedSubjectIdx ? "selected" : ""}>📘 ${s.name}</option>`
       ).join("");
 
-      // Weekly Frequency Dock (Screenshot 1)
       const todayIdx = getMonDayIdx();
       state.weekSecondsByDay[todayIdx] = Math.max(state.weekSecondsByDay[todayIdx] || 0, state.verifiedSecondsToday);
       let activeDaysCount = 0;
@@ -1721,9 +1859,16 @@
     }
 
     // =========================================================================
-    // SUBJECTS TAB + (+ TEMPO MODAL) + SYLLABUS TOPICS
+    // SUBJECTS TAB + (+ TEMPO MODAL) + SYLLABUS TOPICS + CUSTOM COLOR
     // =========================================================================
     let editingSubjectIdx = 0;
+    let selectedNewSubjColor = "#00F0FF";
+
+    function pickNewSubjColor(hex, el) {
+      selectedNewSubjColor = hex;
+      document.querySelectorAll("#newSubjColorRow div").forEach(d => d.style.border = "none");
+      el.style.border = "2.5px solid #FFF";
+    }
 
     function renderSubjects() {
       document.getElementById("materiasGoalLabel").textContent = `${state.dailyGoalHours}h`;
@@ -1739,9 +1884,12 @@
           const k = `${s.name}_${tIdx}`;
           const done = !!state.doneTopics[k];
           return `
-            <div onclick="toggleTopic('${k}')" style="display:flex; align-items:center; gap:8px; padding:7px 10px; background:#070C18; border:1px solid #162238; border-radius:10px; margin-top:5px; cursor:pointer; font-size:12px;">
-              <span>${done ? '✅' : '⬜'}</span>
-              <span style="${done ? 'text-decoration:line-through; color:#64748B;' : 'color:#E2E8F0;'}">${t}</span>
+            <div onclick="toggleTopic('${k}')" style="display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 10px; background:#070C18; border:1px solid #162238; border-radius:10px; margin-top:5px; cursor:pointer; font-size:12px;">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span>${done ? '✅' : '⬜'}</span>
+                <span style="${done ? 'text-decoration:line-through; color:#64748B;' : 'color:#E2E8F0;'}">${t}</span>
+              </div>
+              <span onclick="event.stopPropagation(); removeSyllabusTopic(${idx}, ${tIdx})" style="color:#64748B; font-size:11px;">✕</span>
             </div>
           `;
         }).join("");
@@ -1749,13 +1897,16 @@
         return `
           <div class="bento-card" style="border-left: 4px solid ${s.color}; padding:16px;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
-              <div>
-                <div style="font-weight:900; font-size:16px;">${s.name}</div>
+              <div style="min-width:0; flex:1;">
+                <div style="font-weight:900; font-size:16px; display:flex; align-items:center; gap:8px;">
+                  <span>${s.name}</span>
+                  ${state.subjects.length > 1 ? `<span onclick="deleteSubject(${idx})" style="color:#64748B; font-size:12px; cursor:pointer;" title="Excluir matéria">🗑️</span>` : ''}
+                </div>
                 <div style="font-size:12px; color:var(--muted); margin-top:2px;">
                   Hoje: <strong style="color:${s.color};">${fmtHM(s.studiedMins || 0)}</strong> / Meta: ${fmtHM(goalM)} (${pct}%)
                 </div>
               </div>
-              <div style="display:flex; gap:6px;">
+              <div style="display:flex; gap:6px; flex-shrink:0;">
                 <button class="glass-pill-btn" onclick="openQuickTimeModal(${idx})">⏱️ + Tempo</button>
                 <button class="glass-pill-btn cta-active-pill" onclick="focusNowOnSubject(${idx})">▶ Focar</button>
               </div>
@@ -1799,6 +1950,20 @@
 
     function toggleTopic(k) { state.doneTopics[k] = !state.doneTopics[k]; saveState(); renderSubjects(); }
 
+    function removeSyllabusTopic(sIdx, tIdx) {
+      state.subjects[sIdx].topics.splice(tIdx, 1);
+      saveState(); renderSubjects();
+    }
+
+    function deleteSubject(idx) {
+      if (state.subjects.length <= 1) return;
+      if (confirm(`Remover a disciplina "${state.subjects[idx].name}"?`)) {
+        state.subjects.splice(idx, 1);
+        state.selectedSubjectIdx = 0;
+        saveState(); renderAll();
+      }
+    }
+
     function promptAddTopic(idx) {
       const t = prompt("Novo tópico do edital para " + state.subjects[idx].name + ":");
       if (t && t.trim()) {
@@ -1812,10 +1977,9 @@
       const n = document.getElementById("addSubjNameInp").value.trim();
       const g = parseInt(document.getElementById("addSubjMinsInp").value, 10) || 60;
       if (!n) return;
-      const cols = ["#00F0FF", "#10B981", "#A855F7", "#F59E0B", "#F43F5E"];
       state.subjects.push({
         name: n, weight: 0.2, customGoalMins: g,
-        color: cols[state.subjects.length % cols.length],
+        color: selectedNewSubjColor,
         studiedMins: 0, topics: ["Teoria Base", "Bateria de Exercícios"]
       });
       document.getElementById("addSubjNameInp").value = "";
@@ -1883,11 +2047,10 @@
       const verWeek = Math.floor(state.weekSecondsByDay.reduce((a, b) => a + b, 0) / 60);
       const subjTotal = state.subjects.reduce((acc, s) => acc + (s.studiedMins || 0), 0);
 
-      const shownVer = statsPeriod === "day" ? verToday : statsPeriod === "week" ? Math.max(verWeek, verToday) : Math.max(verWeek, verToday);
+      const shownVer = statsPeriod === "day" ? verToday : Math.max(verWeek, verToday);
       document.getElementById("kpiVerifiedTime").textContent = fmtHM(shownVer);
       document.getElementById("kpiTotalSubjectsTime").textContent = fmtHM(Math.max(subjTotal, shownVer));
 
-      // Bar Chart
       const bc = document.getElementById("statsBarCanvas");
       if (bc) {
         const ctx = bc.getContext("2d");
@@ -1922,7 +2085,6 @@
         });
       }
 
-      // Donut Chart
       const dc = document.getElementById("statsDonutCanvas");
       if (dc) {
         const ctx = dc.getContext("2d");
@@ -1946,18 +2108,16 @@
         `).join("");
       }
 
-      // 30-Day Heatmap
       const hm = document.getElementById("heatmap30Grid");
       hm.innerHTML = Array.from({ length: 30 }, (_, i) => {
-        const isToday = i === 29;
-        const active = isToday || i === 27 || i === 24 || i === 20;
-        const bg = isToday ? "linear-gradient(135deg, #10B981, #00F0FF)" : active ? "rgba(16, 185, 129, 0.45)" : "#0F172A";
+        const isToday = i === 29 && verToday > 0;
+        const bg = isToday ? "linear-gradient(135deg, #10B981, #00F0FF)" : "#0F172A";
         return `<div class="heat-cell" style="background:${bg};"></div>`;
       }).join("");
     }
 
     // =========================================================================
-    // MULTIPLAYER GROUPS + FIREBASE SYNC + 1080x1920 STORY GENERATOR
+    // MULTIPLAYER GROUPS (MULTI-USER ISOLATION + STORY CARD 1080x1920)
     // =========================================================================
     let rankTab = "live";
     let roomMembers = [];
@@ -1991,6 +2151,7 @@
         const subjName = state.subjects[state.selectedSubjectIdx]?.name || "Geral";
         const inits = state.userName.split(" ").map(w => w.replace(/[^a-zA-Z0-9]/g, "")).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase() || "EU";
 
+        // Grava exclusivamente na chave única deste dispositivo (state.userId)
         await fetch(`${FIREBASE_DB}/rooms/${state.activeRoomCode}/members/${state.userId}.json`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -2011,12 +2172,8 @@
         const data = await res.json();
         if (!data) return;
 
-        const dedup = {};
-        Object.values(data).forEach(m => {
-          const k = (m.name || "Estudante").trim().toLowerCase();
-          if (!dedup[k] || (m.updatedAt || 0) > (dedup[k].updatedAt || 0)) dedup[k] = m;
-        });
-        roomMembers = Object.values(dedup);
+        // Mantém todos os usuários separados pelo seu ID único de aparelho!
+        roomMembers = Object.values(data).filter(m => m && m.id);
         renderLeaderboard();
       } catch (e) {}
     }
@@ -2045,7 +2202,7 @@
         const medal = i === 0 ? "🥇 1º" : i === 1 ? "🥈 2º" : i === 2 ? "🥉 3º" : `#${i + 1}`;
         const live = m.isStudying && (Date.now() - (m.updatedAt || 0) < 900000);
         const mins = rankTab === "week" ? (m.minsWeek || 0) : (m.minsToday || 0);
-        const c = cols[i % cols.length];
+        const c = cols[Math.abs((m.id || "").charCodeAt(4) || i) % cols.length];
 
         return `
           <div style="background:#0B1120; border:${isMe ? '1.5px solid var(--accent)' : '1px solid #1E293B'}; border-radius:22px; padding:13px 14px; display:flex; align-items:center; gap:12px; margin-bottom:10px;">
@@ -2158,7 +2315,10 @@
       const n = document.getElementById("profNameInp").value.trim();
       const s = document.getElementById("profStatusInp").value.trim();
       const r = document.getElementById("profRoomInp").value.trim().toUpperCase();
-      if (n) state.userName = n;
+      if (n) {
+        state.userName = n;
+        state.hasSetCustomName = true;
+      }
       if (s) state.userStatus = s;
       if (r) {
         if (!state.rooms.find(x => x.code === r)) state.rooms.push({ code: r, name: `Esquadrão ${r}`, cat: "Sala Personalizada" });
@@ -2168,18 +2328,38 @@
     }
 
     // =========================================================================
-    // NEURAL AUDIO & FIREBASE FEEDBACK
+    // NEURAL AUDIO (MARROM, CHUVA & ONDAS BINAURAIS ALPHA) + BACKUP JSON
     // =========================================================================
-    let aCtx = null, nSource = null;
+    let aCtx = null, nSource = null, oscLeft = null, oscRight = null;
     function setNeuralAudio(mode) {
-      ["off", "brown", "rain"].forEach(k => {
+      ["off", "brown", "rain", "alpha"].forEach(k => {
         const b = document.getElementById(`aud-${k}`);
-        b.style.borderColor = k === mode ? "var(--cyan)" : "#243452";
-        b.style.color = k === mode ? "var(--cyan)" : "#E2E8F0";
+        if (b) {
+          b.style.borderColor = k === mode ? "var(--cyan)" : "#243452";
+          b.style.color = k === mode ? "var(--cyan)" : "#E2E8F0";
+        }
       });
       if (nSource) { try { nSource.stop(); nSource.disconnect(); } catch (_) {} nSource = null; }
+      if (oscLeft) { try { oscLeft.stop(); oscLeft.disconnect(); } catch (_) {} oscLeft = null; }
+      if (oscRight) { try { oscRight.stop(); oscRight.disconnect(); } catch (_) {} oscRight = null; }
       if (mode === "off") return;
+
       if (!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      if (mode === "alpha") {
+        // Ondas Binaurais Alpha (200Hz + 210Hz = 10Hz Foco Profundo)
+        oscLeft = aCtx.createOscillator();
+        oscRight = aCtx.createOscillator();
+        const g = aCtx.createGain();
+        g.gain.value = 0.06;
+        oscLeft.frequency.value = 200;
+        oscRight.frequency.value = 210;
+        oscLeft.connect(g); oscRight.connect(g);
+        g.connect(aCtx.destination);
+        oscLeft.start(); oscRight.start();
+        return;
+      }
+
       const buf = aCtx.createBuffer(1, aCtx.sampleRate * 3, aCtx.sampleRate);
       const data = buf.getChannelData(0);
       let last = 0;
@@ -2191,6 +2371,37 @@
       nSource = aCtx.createBufferSource(); nSource.buffer = buf; nSource.loop = true;
       const g = aCtx.createGain(); g.gain.value = 0.14;
       nSource.connect(g); g.connect(aCtx.destination); nSource.start(0);
+    }
+
+    function exportBackupJson() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `Estudancia_Backup_${todayKey}.json`;
+      a.click();
+    }
+
+    function importBackupJson() {
+      const inp = document.createElement("input");
+      inp.type = "file";
+      inp.accept = "application/json";
+      inp.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const loaded = JSON.parse(ev.target.result);
+            if (loaded && loaded.subjects) {
+              state = loaded;
+              saveState(); applySavedThemeVars(); renderAll();
+              alert("✅ Backup restaurado com sucesso!");
+            }
+          } catch (_) { alert("Arquivo de backup inválido."); }
+        };
+        reader.readAsText(file);
+      };
+      inp.click();
     }
 
     async function sendFeedbackToFirebase() {
@@ -2205,7 +2416,7 @@
             id, userId: state.userId, userName: state.userName,
             category: document.getElementById("fbCatSelect").value,
             message: msg, contact: document.getElementById("fbContactInp").value.trim(),
-            appVersion: "2.4.5 Clone Web/iOS", timestamp: Date.now()
+            appVersion: "2.4.6 MultiUser Web/iOS", timestamp: Date.now()
           })
         });
       } catch (_) {}
@@ -2219,7 +2430,14 @@
       document.getElementById(`tab-${id}`).classList.add("active");
       document.querySelectorAll(".bottom-nav-bar .bnav-btn").forEach(b => b.classList.remove("active"));
       if (btn) btn.classList.add("active");
-      if (id === "grupos") syncFirebaseRoom();
+      if (id === "grupos") {
+        // Se for o 1º acesso da pessoa na aba Grupos, pede para ela escolher o nome dela!
+        if (!state.hasSetCustomName) {
+          document.getElementById("profNameInp").value = "";
+          openModal("profileModal");
+        }
+        syncFirebaseRoom();
+      }
       if (id === "estatisticas") renderStatistics();
     }
 
@@ -2228,7 +2446,7 @@
 
     // Init
     if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
-    document.getElementById("profNameInp").value = state.userName;
+    document.getElementById("profNameInp").value = state.hasSetCustomName ? state.userName : "";
     document.getElementById("profStatusInp").value = state.userStatus;
     renderAll();
     animateCanvasLoop();
