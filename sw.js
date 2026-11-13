@@ -1,4 +1,4 @@
-const CACHE_NAME = 'estudancia-pwa-v2.4.6-multiuser';
+const CACHE_NAME = 'estudancia-ios18-v2.5.0';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (e) => {
