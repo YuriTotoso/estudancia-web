@@ -13,8 +13,8 @@
   <style>
     :root {
       --ios-bg: #000000;
-      --ios-glass: rgba(28, 28, 32, 0.68);
-      --ios-glass-elevated: rgba(44, 44, 48, 0.72);
+      --ios-glass: rgba(24, 26, 34, 0.66);
+      --ios-glass-elevated: rgba(40, 42, 52, 0.72);
       --ios-border: rgba(255, 255, 255, 0.11);
       --ios-specular: rgba(255, 255, 255, 0.18);
       --ios-blue: #0A84FF;
@@ -40,18 +40,19 @@
       margin: 0;
       background-color: var(--ios-bg);
       background-image:
-        radial-gradient(circle at 80% 10%, rgba(10, 132, 255, 0.22) 0%, transparent 48%),
-        radial-gradient(circle at 15% 35%, rgba(94, 92, 230, 0.18) 0%, transparent 52%),
-        radial-gradient(circle at 50% 90%, rgba(48, 209, 88, 0.10) 0%, transparent 50%);
+        radial-gradient(circle at 80% 10%, rgba(10, 132, 255, 0.20) 0%, transparent 48%),
+        radial-gradient(circle at 15% 35%, rgba(94, 92, 230, 0.16) 0%, transparent 52%),
+        radial-gradient(circle at 50% 90%, rgba(48, 209, 88, 0.09) 0%, transparent 50%);
       background-attachment: fixed;
       color: var(--text-primary);
       min-height: 100dvh;
-      padding-top: calc(74px + env(safe-area-inset-top));
-      padding-bottom: calc(104px + env(safe-area-inset-bottom));
+      padding-top: calc(70px + env(safe-area-inset-top));
+      padding-bottom: calc(106px + env(safe-area-inset-bottom));
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
+    /* FUNDO GLOBAL DE ESTRELAS + ESTRELAS CADENTES EM TODAS AS ABAS */
     #ambientStarsCanvas {
       position: fixed;
       inset: 0;
@@ -59,15 +60,15 @@
       height: 100vh;
       z-index: -1;
       pointer-events: none;
-      opacity: 0.65;
+      opacity: 1;
     }
 
     /* =========================================================================
-       iOS 18 DYNAMIC ISLAND LIVE ACTIVITY HEADER
+       BARRA SUPERIOR 100% TRANSPARENTE (SEM ESCURECER O TOPO)
        ========================================================================= */
     .dynamic-island-wrapper {
       position: fixed;
-      top: calc(10px + env(safe-area-inset-top));
+      top: calc(8px + env(safe-area-inset-top));
       left: 12px;
       right: 12px;
       max-width: 520px;
@@ -77,27 +78,22 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
+      background: transparent;
     }
 
     .dynamic-island {
       flex: 1;
-      background: rgba(14, 14, 16, 0.92);
-      backdrop-filter: blur(35px) saturate(200%);
-      -webkit-backdrop-filter: blur(35px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      padding: 8px 14px;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border: none;
+      box-shadow: none;
+      padding: 6px 4px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      transition: all 0.35s cubic-bezier(0.32, 0.72, 0, 1);
       cursor: pointer;
-    }
-    .dynamic-island.running {
-      border-color: rgba(48, 209, 88, 0.45);
-      box-shadow: 0 14px 40px rgba(48, 209, 88, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.18);
     }
 
     .island-left {
@@ -122,12 +118,13 @@
       min-width: 0;
     }
     .island-app-name {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 800;
       letter-spacing: -0.3px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
     }
     .island-sub {
       font-size: 10.5px;
@@ -139,14 +136,15 @@
     .island-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-shrink: 0;
     }
     .island-timer-pill {
-      background: rgba(48, 209, 88, 0.16);
+      background: rgba(48, 209, 88, 0.18);
+      border: 1px solid rgba(48, 209, 88, 0.4);
       color: var(--ios-green);
       font-variant-numeric: tabular-nums;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 800;
       padding: 4px 10px;
       border-radius: 999px;
@@ -154,16 +152,13 @@
     }
 
     .top-circle-btn {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: var(--ios-glass);
-      backdrop-filter: blur(30px) saturate(190%);
-      -webkit-backdrop-filter: blur(30px) saturate(190%);
-      border: 1px solid var(--ios-border);
-      box-shadow: inset 0 1px 0 var(--ios-specular);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       color: #FFF;
-      font-size: 16px;
+      font-size: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -194,8 +189,8 @@
 
     .ios-card {
       background: var(--ios-glass);
-      backdrop-filter: blur(40px) saturate(190%);
-      -webkit-backdrop-filter: blur(40px) saturate(190%);
+      backdrop-filter: blur(36px) saturate(190%);
+      -webkit-backdrop-filter: blur(36px) saturate(190%);
       border: 1px solid var(--ios-border);
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), inset 0 1px 0 var(--ios-specular);
       border-radius: 30px;
@@ -437,23 +432,21 @@
     .ios-hour-tile:active { transform: scale(0.94); }
 
     /* =========================================================================
-       iOS FLOATING ULTRA-BLUR TAB BAR (BOTTOM)
+       APENAS A BARRA INFERIOR PERMANECE OPACA (6 ABAS COM CONTEÚDOS)
        ========================================================================= */
     .ios-tabbar {
       position: fixed;
-      bottom: calc(12px + env(safe-area-inset-bottom));
-      left: 14px;
-      right: 14px;
-      max-width: 500px;
+      bottom: calc(10px + env(safe-area-inset-bottom));
+      left: 10px;
+      right: 10px;
+      max-width: 520px;
       margin: 0 auto;
       z-index: 95;
-      background: rgba(22, 22, 26, 0.82);
-      backdrop-filter: blur(40px) saturate(200%);
-      -webkit-backdrop-filter: blur(40px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+      background: rgba(8, 12, 22, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.14);
       border-radius: 999px;
-      padding: 6px;
+      padding: 5px;
       display: flex;
       justify-content: space-between;
     }
@@ -462,19 +455,20 @@
       border: none;
       background: transparent;
       color: var(--text-secondary);
-      padding: 7px 2px;
+      padding: 6px 2px;
       border-radius: 999px;
-      font-size: 10.5px;
+      font-size: 9.8px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+      white-space: nowrap;
     }
     .ios-tab-item.active {
       background: rgba(255, 255, 255, 0.14);
       color: #FFFFFF;
       font-weight: 700;
     }
-    .ios-tab-ico { display: block; font-size: 17px; margin-bottom: 2px; }
+    .ios-tab-ico { display: block; font-size: 16px; margin-bottom: 2px; }
 
     /* =========================================================================
        iOS SLIDE-UP BOTTOM SHEET MODALS
@@ -496,7 +490,7 @@
       max-width: 520px;
       max-height: 88dvh;
       overflow-y: auto;
-      background: rgba(28, 28, 32, 0.94);
+      background: rgba(28, 28, 32, 0.96);
       backdrop-filter: blur(50px) saturate(200%);
       -webkit-backdrop-filter: blur(50px) saturate(200%);
       border-top: 1px solid rgba(255, 255, 255, 0.18);
@@ -537,14 +531,14 @@
 
   <canvas id="ambientStarsCanvas"></canvas>
 
-  <!-- iOS 18 DYNAMIC ISLAND LIVE ACTIVITY HEADER -->
+  <!-- TOP BAR 100% TRANSPARENTE -->
   <header class="dynamic-island-wrapper">
     <div class="dynamic-island" id="dynamicIslandBar" onclick="switchBottomTab('foco', document.querySelector('.ios-tab-item'))">
       <div class="island-left">
         <div class="island-orb">🪐</div>
         <div class="island-title-stack">
           <div class="island-app-name" id="islandMainTitle">Organizancia Estudancia</div>
-          <div class="island-sub" id="islandSubText">Sincronizado Android & iOS • v2.4.0</div>
+          <div class="island-sub" id="islandSubText">Reset diário às 05:00h • v2.5.1</div>
         </div>
       </div>
       <div class="island-right">
@@ -573,7 +567,7 @@
       <div class="ios-card">
         <div class="hero-spatial-grid">
           <div class="hero-info-col">
-            <div class="ios-eyebrow">Tempo de Foco Hoje</div>
+            <div class="ios-eyebrow">Tempo de Foco Hoje (Virada 05:00h)</div>
             <div class="ios-large-title" id="heroStudiedTodayText">0h 00m</div>
             <div class="ios-goal-badge" id="heroGoalSubText">🎯 Meta 4h • 0% concluído</div>
 
@@ -650,7 +644,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <div>
             <div style="font-weight:800; font-size:17px; letter-spacing:-0.3px;">Grade 24h Inteligente</div>
-            <div style="font-size:12px; color:var(--text-secondary);">Toque num horário para agendar ou registrar estudo</div>
+            <div style="font-size:12px; color:var(--text-secondary);">Toque num horário para agendar no seu controle pessoal</div>
           </div>
           <div style="display:flex; gap:6px;">
             <button class="ios-pill" style="padding:6px 12px; font-size:12px; color:var(--ios-green);" onclick="openQuickPaintSubjectModal('plus30')">+30m Rápido</button>
@@ -675,7 +669,30 @@
     </section>
 
     <!-- =====================================================================
-         TAB 3: GRUPOS (100% SYNCED ANDROID <-> iOS IN REAL TIME)
+         TAB 3: NOVA ABA CONTEÚDOS (ESTRUTURA BASE PRONTA)
+         ===================================================================== -->
+    <section id="tab-conteudos" class="tab-view">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <div>
+          <div style="font-weight:800; font-size:20px; letter-spacing:-0.4px;">📖 Conteúdos para Estudar</div>
+          <div style="font-size:12px; color:var(--text-secondary);">Trilhas, materiais, revisões e assuntos prioritários</div>
+        </div>
+        <span style="background:rgba(10,132,255,0.16); border:1px solid rgba(90,200,250,0.4); color:var(--ios-cyan); font-size:11px; font-weight:800; padding:5px 12px; border-radius:999px;">NOVO ✨</span>
+      </div>
+
+      <div class="ios-card" style="text-align:center; padding:34px 22px;">
+        <div style="width:64px; height:64px; border-radius:50%; margin:0 auto 14px; background:radial-gradient(circle, rgba(90,200,250,0.28), rgba(10,132,255,0.06)); display:flex; align-items:center; justify-content:center; font-size:28px;">
+          📚
+        </div>
+        <div style="font-weight:800; font-size:17.5px; margin-bottom:8px;">Central de Conteúdos Conectada</div>
+        <div style="font-size:13px; color:var(--text-secondary); line-height:1.5; max-width:380px; margin:0 auto;">
+          Aba estruturada e sincronizada com o sistema de matérias e com o relógio lógico das 05:00h da manhã.
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         TAB 4: GRUPOS (BLINDADO CONTRA FANTASMAS + ANTI-CHEAT)
          ===================================================================== -->
     <section id="tab-grupos" class="tab-view">
 
@@ -683,7 +700,7 @@
 
       <div class="ios-card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:11.5px; color:var(--ios-cyan); font-weight:700;" id="roomSubHeader">📲 Sincronizado Android & iOS em Tempo Real</span>
+          <span style="font-size:11.5px; color:var(--ios-cyan); font-weight:700;" id="roomSubHeader">🛡️ Apenas Horas Reais do Cronômetro (Reset 05:00h)</span>
           <span style="background:rgba(48,209,88,0.16); color:var(--ios-green); padding:4px 10px; border-radius:999px; font-size:11.5px; font-weight:700;" id="roomOnlineCount">🟢 0 online</span>
         </div>
 
@@ -714,7 +731,7 @@
     </section>
 
     <!-- =====================================================================
-         TAB 4: ESTATÍSTICAS
+         TAB 5: ESTATÍSTICAS
          ===================================================================== -->
     <section id="tab-estatisticas" class="tab-view">
 
@@ -726,20 +743,20 @@
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
         <div class="ios-card" style="margin:0; padding:16px;">
-          <div class="ios-eyebrow">Tempo Verificado</div>
+          <div class="ios-eyebrow">Tempo Verificado (Cronômetro)</div>
           <div style="font-size:26px; font-weight:800; color:var(--ios-cyan); margin-top:4px;" id="kpiVerifiedTime">0h 00m</div>
-          <div style="font-size:11px; color:var(--ios-green); margin-top:3px;">✓ Sincronizado nos Grupos</div>
+          <div style="font-size:11px; color:var(--ios-green); margin-top:3px;">🛡️ Válido nos Grupos</div>
         </div>
         <div class="ios-card" style="margin:0; padding:16px;">
           <div class="ios-eyebrow">Total nas Matérias</div>
           <div style="font-size:26px; font-weight:800; color:var(--ios-green); margin-top:4px;" id="kpiTotalSubjectsTime">0h 00m</div>
-          <div style="font-size:11px; color:var(--text-secondary); margin-top:3px;">Cronômetro + Grade</div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:3px;">Cronômetro + Planejador</div>
         </div>
       </div>
 
       <div class="ios-card">
         <div style="font-weight:800; font-size:16px; margin-bottom:2px;">Rendimento Semanal</div>
-        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Meta configurada: <span id="statGoalH">4h</span>/dia</div>
+        <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">Meta configurada: <span id="statGoalH">4h</span>/dia (Virada às 05:00h)</div>
         <canvas id="statsBarCanvas" width="520" height="210" style="width:100%; height:165px; display:block;"></canvas>
       </div>
 
@@ -753,7 +770,7 @@
     </section>
 
     <!-- =====================================================================
-         TAB 5: MATÉRIAS & EDITAL
+         TAB 6: MATÉRIAS & EDITAL
          ===================================================================== -->
     <section id="tab-materias" class="tab-view">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -772,10 +789,11 @@
 
   </main>
 
-  <!-- iOS FLOATING BLUR TAB BAR -->
+  <!-- BARRA INFERIOR OPACA COM AS 6 ABAS -->
   <nav class="ios-tabbar">
     <button class="ios-tab-item active" onclick="switchBottomTab('foco', this)"><span class="ios-tab-ico">⏱️</span>Foco</button>
-    <button class="ios-tab-item" onclick="switchBottomTab('planejador', this)"><span class="ios-tab-ico">📅</span>Planejador</button>
+    <button class="ios-tab-item" onclick="switchBottomTab('planejador', this)"><span class="ios-tab-ico">📅</span>Agenda</button>
+    <button class="ios-tab-item" onclick="switchBottomTab('conteudos', this)"><span class="ios-tab-ico">📖</span>Conteúdos</button>
     <button class="ios-tab-item" onclick="switchBottomTab('grupos', this)"><span class="ios-tab-ico">👥</span>Grupos</button>
     <button class="ios-tab-item" onclick="switchBottomTab('estatisticas', this)"><span class="ios-tab-ico">📊</span>Resumo</button>
     <button class="ios-tab-item" onclick="switchBottomTab('materias', this)"><span class="ios-tab-ico">📚</span>Matérias</button>
@@ -811,7 +829,7 @@
       <div class="sheet-grabber"></div>
       <div style="font-weight:800; font-size:19px; margin-bottom:4px;">👋 Seu Perfil no Ranking</div>
       <div style="font-size:12.5px; color:var(--text-secondary); margin-bottom:14px;">
-        Sincronizado em tempo real com usuários do Android e do iOS nas mesmas salas.
+        Defina seu nome para aparecer ao vivo nas salas junto com a galera do Android e do iOS.
       </div>
       <label style="font-size:12px; color:var(--text-secondary);">Seu Nome ou Apelido</label>
       <input type="text" id="profNameInp" placeholder="Ex: Pedro • ITA" maxlength="24" />
@@ -832,8 +850,8 @@
   <div class="ios-sheet-backdrop" id="quickTimeSheet" onclick="if(event.target===this)closeSheet('quickTimeSheet')">
     <div class="ios-bottom-sheet">
       <div class="sheet-grabber"></div>
-      <div style="font-weight:800; font-size:18px; margin-bottom:4px;" id="qtModalTitle">⏱️ Ajustar Tempo</div>
-      <div style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">Adiciona ao seu controle pessoal (o ranking de grupos usa apenas o cronômetro ao vivo):</div>
+      <div style="font-weight:800; font-size:18px; margin-bottom:4px;" id="qtModalTitle">⏱️ Ajustar Tempo Pessoal</div>
+      <div style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">Adiciona ao seu controle pessoal da matéria (o ranking de grupos contabiliza apenas o cronômetro ao vivo):</div>
       <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px;">
         <button class="ios-btn-secondary" onclick="applyQuickSubjectTime(15)">+15 min</button>
         <button class="ios-btn-secondary" onclick="applyQuickSubjectTime(30)">+30 min</button>
@@ -931,6 +949,8 @@
     // MESMO SERVIDOR FIREBASE DO APP ANDROID!
     const FIREBASE_DB = "https://organizancia-estudancia-default-rtdb.firebaseio.com";
     const DAYS_SHORT = ["SEG", "TER", "QUA", "QUI", "SEX", "SÁB", "DOM"];
+    const FIVE_HOURS_MS = 5 * 60 * 60 * 1000; // Reset diário às 05:00 da manhã!
+
     const MOTIVATIONAL_QUOTES = [
       "“A disciplina é a ponte entre as suas metas e a sua aprovação.” — Jim Rohn",
       "“Enquanto muitos descansam, quem tem um propósito constrói o próprio futuro.”",
@@ -983,15 +1003,42 @@
       }
     };
 
+    // =========================================================================
+    // RELÓGIO LÓGICO DAS 05:00 DA MANHÃ (SINCRONIZADO COM O ANDROID)
+    // =========================================================================
+    function getLogicalDateYmd() {
+      const shifted = new Date(Date.now() - FIVE_HOURS_MS);
+      const y = shifted.getFullYear();
+      const m = String(shifted.getMonth() + 1).padStart(2, "0");
+      const d = String(shifted.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
     function getMonDayIdx() {
-      const d = new Date().getDay();
+      const shifted = new Date(Date.now() - FIVE_HOURS_MS);
+      const d = shifted.getDay();
       return d === 0 ? 6 : d - 1;
     }
 
-    const randNum = Math.floor(100 + Math.random() * 900);
+    function getLogicalWeekId() {
+      const shifted = new Date(Date.now() - FIVE_HOURS_MS);
+      const dayIdx = getMonDayIdx();
+      const monday = new Date(shifted.getTime() - dayIdx * 86400000);
+      return `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, "0")}-${String(monday.getDate()).padStart(2, "0")}`;
+    }
+
+    // =========================================================================
+    // ID PERMANENTE DE APARELHO (IMPEDE DUPLICATAS E USUÁRIOS FANTASMAS)
+    // =========================================================================
+    let permanentUid = localStorage.getItem("estudancia_permanent_device_uid");
+    if (!permanentUid) {
+      permanentUid = "usr_" + Math.random().toString(36).substring(2, 10) + "_" + Date.now().toString(36).slice(-4);
+      localStorage.setItem("estudancia_permanent_device_uid", permanentUid);
+    }
+
     let state = JSON.parse(localStorage.getItem("estudancia_ios18_state") || "null") || {
-      userId: "usr_" + Math.random().toString(36).substring(2, 10) + "_" + Date.now().toString(36).slice(-4),
-      userName: `Estudante #${randNum}`,
+      userId: permanentUid,
+      userName: "",
       hasSetCustomName: false,
       userStatus: "🚀 Rumo à aprovação!",
       accentColor: "#0A84FF",
@@ -1001,7 +1048,8 @@
       dDayDate: "2026-11-15",
       verifiedSecondsToday: 0,
       weekSecondsByDay: [0, 0, 0, 0, 0, 0, 0],
-      lastDateYmd: new Date().toISOString().slice(0, 10),
+      lastDateYmd: getLogicalDateYmd(),
+      lastWeekId: getLogicalWeekId(),
       selectedSubjectIdx: 1,
       selectedPlannerDay: getMonDayIdx(),
       rooms: [
@@ -1015,12 +1063,38 @@
       tasksByDay: {}
     };
 
-    const todayKey = new Date().toISOString().slice(0, 10);
-    if (state.lastDateYmd !== todayKey) {
-      state.lastDateYmd = todayKey;
-      state.verifiedSecondsToday = 0;
-      state.subjects.forEach(s => s.studiedMins = 0);
+    state.userId = permanentUid;
+    if (
+      !state.userName ||
+      state.userName.startsWith("Estudante #") ||
+      state.userName === "Estudante iOS" ||
+      state.userName === "Estudante"
+    ) {
+      state.hasSetCustomName = false;
     }
+
+    function check5AmLogicalRollover() {
+      const currentLogicalDate = getLogicalDateYmd();
+      const currentLogicalWeek = getLogicalWeekId();
+      let changed = false;
+
+      if (state.lastDateYmd !== currentLogicalDate) {
+        state.lastDateYmd = currentLogicalDate;
+        state.verifiedSecondsToday = 0;
+        state.subjects.forEach(s => s.studiedMins = 0);
+        state.selectedPlannerDay = getMonDayIdx();
+        changed = true;
+      }
+
+      if (state.lastWeekId !== currentLogicalWeek) {
+        state.lastWeekId = currentLogicalWeek;
+        state.weekSecondsByDay = [0, 0, 0, 0, 0, 0, 0];
+        changed = true;
+      }
+
+      if (changed) saveState();
+    }
+    check5AmLogicalRollover();
 
     function saveState() {
       localStorage.setItem("estudancia_ios18_state", JSON.stringify(state));
@@ -1044,14 +1118,14 @@
     }
 
     // =========================================================================
-    // CRONÔMETRO ANTI-CONGELAMENTO + DYNAMIC ISLAND CONTROLLER
+    // CRONÔMETRO MONOTÔNICO ANTI-BYPASS (IMUNE A MUDANÇA DE HORA NO CELULAR)
     // =========================================================================
     let focusMode = "free";
     let sessionSecs = 0;
     let pomoTargetSecs = 25 * 60;
     let isRunning = false;
     let timerId = null;
-    let lastTickMs = null;
+    let lastMonoMs = null;
     let uncreditedSubjSecs = 0;
 
     function fmtHMS(s) {
@@ -1094,12 +1168,18 @@
     }
 
     function tickDelta() {
-      if (!isRunning || !lastTickMs) return;
-      const now = Date.now();
-      const delta = Math.floor((now - lastTickMs) / 1000);
-      if (delta <= 0) return;
+      if (!isRunning || lastMonoMs === null) return;
+      check5AmLogicalRollover();
 
-      lastTickMs += delta * 1000;
+      // Usa performance.now() (clock monotônico da CPU) para impedir trapaça adiantando o relógio!
+      const nowMono = performance.now();
+      const rawDelta = Math.floor((nowMono - lastMonoMs) / 1000);
+      if (rawDelta <= 0) return;
+
+      lastMonoMs += rawDelta * 1000;
+      // Limita saltos anormais a no máximo 180s caso a aba tenha ficado suspensa
+      const delta = Math.min(rawDelta, 180);
+
       sessionSecs += delta;
       state.verifiedSecondsToday += delta;
       uncreditedSubjSecs += delta;
@@ -1116,7 +1196,7 @@
 
       if (focusMode !== "free" && sessionSecs >= pomoTargetSecs) {
         finishAndBankSession();
-        alert("🎉 Sessão concluída! Seu tempo foi sincronizado.");
+        alert("🎉 Sessão concluída! Seu tempo líquido foi sincronizado.");
         return;
       }
       saveState();
@@ -1133,14 +1213,14 @@
       const island = document.getElementById("dynamicIslandBar");
 
       if (isRunning) {
-        lastTickMs = Date.now();
+        lastMonoMs = performance.now();
         playBtn.textContent = "⏸ Pausar";
         playBtn.style.background = "var(--ios-orange)";
         island.classList.add("running");
         timerId = setInterval(tickDelta, 1000);
       } else {
         tickDelta();
-        lastTickMs = null;
+        lastMonoMs = null;
         playBtn.textContent = "▶ Retomar";
         playBtn.style.background = "var(--accent)";
         island.classList.remove("running");
@@ -1154,7 +1234,7 @@
       tickDelta();
       clearInterval(timerId);
       isRunning = false;
-      lastTickMs = null;
+      lastMonoMs = null;
       sessionSecs = 0;
       const playBtn = document.getElementById("mainPlayPauseBtn");
       playBtn.textContent = "▶ Iniciar Sessão";
@@ -1173,15 +1253,14 @@
     }
 
     function updateLiveDOM() {
+      // Relógio 100% unificado: exibe os minutos verificados do cronômetro sem somar duplicado
       const verMins = Math.floor(state.verifiedSecondsToday / 60);
-      const subjTotal = state.subjects.reduce((acc, s) => acc + (s.studiedMins || 0), 0);
-      const heroMins = Math.max(verMins, subjTotal);
       const goalMins = state.dailyGoalHours * 60;
-      const pct = Math.min(100, Math.round((heroMins / Math.max(1, goalMins)) * 100));
+      const pct = Math.min(100, Math.round((verMins / Math.max(1, goalMins)) * 100));
 
-      const stage = resolveSolarStage(heroMins);
+      const stage = resolveSolarStage(verMins);
       document.getElementById("planetStageLabel").textContent = stage.name;
-      document.getElementById("heroStudiedTodayText").textContent = fmtHM(heroMins);
+      document.getElementById("heroStudiedTodayText").textContent = fmtHM(verMins);
       document.getElementById("heroGoalSubText").textContent = `🎯 Meta ${state.dailyGoalHours}h • ${pct}% concluído`;
 
       const activeSubj = state.subjects[state.selectedSubjectIdx] || state.subjects[0];
@@ -1190,35 +1269,100 @@
 
       document.getElementById("hudSubjectTitle").textContent = `${isRunning ? '🟢' : '📘'} ${activeSubj.name}`;
       document.getElementById("hudLiveStopwatch").textContent = fmtHMS(clockSec);
-      document.getElementById("hudTelemetryLine1").textContent = `⏱️ ${fmtHMS(sessionSecs)} líquidos • Hoje: ${fmtHM(heroMins)}`;
+      document.getElementById("hudTelemetryLine1").textContent = `⏱️ ${fmtHMS(sessionSecs)} na sessão • Hoje: ${fmtHM(verMins)}`;
       document.getElementById("hudTelemetryLine2").textContent = `🛰️ Meta da matéria: ${fmtHM(activeSubj.studiedMins || 0)} / ${fmtHM(subjGoal)}`;
 
-      // Atualiza a Dynamic Island no topo
       document.getElementById("islandMainTitle").textContent = isRunning ? activeSubj.name : "Organizancia Estudancia";
-      document.getElementById("islandSubText").textContent = isRunning ? `Em Foco • Sala #${state.activeRoomCode}` : `Sincronizado Android & iOS • #${state.activeRoomCode}`;
+      document.getElementById("islandSubText").textContent = isRunning ? `Em Foco • Sala #${state.activeRoomCode}` : `Reset diário às 05:00h • #${state.activeRoomCode}`;
       document.getElementById("islandTimerBadge").textContent = isRunning ? fmtMS(clockSec) : fmtHM(verMins);
     }
 
     // =========================================================================
-    // 60FPS SPATIAL CANVAS ENGINE
+    // MOTOR GLOBAL 60FPS: ESTRELAS EM TODAS AS ABAS + ESTRELA CADENTE OCASIONAL
     // =========================================================================
-    const stars = Array.from({ length: 55 }, () => ({
-      x: Math.random(), y: Math.random(), r: Math.random() * 1.4 + 0.4, p: Math.random() * 6.28
+    const stars = Array.from({ length: 74 }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * 1.45 + 0.45,
+      p: Math.random() * 6.28,
+      cyan: Math.random() < 0.25
     }));
+
+    let shootingStar = null;
+    let nextShootTime = Date.now() + 7000;
     let phase = 0;
+
+    function drawGlobalStarsAndMeteors() {
+      const sf = document.getElementById("ambientStarsCanvas");
+      if (sf.width !== window.innerWidth) {
+        sf.width = window.innerWidth;
+        sf.height = window.innerHeight;
+      }
+      const sCtx = sf.getContext("2d");
+      sCtx.clearRect(0, 0, sf.width, sf.height);
+
+      // 1. Estrelas cintilando suavemente atrás de todas as abas
+      stars.forEach(st => {
+        const a = 0.26 + Math.sin(phase + st.p) * 0.22;
+        sCtx.fillStyle = st.cyan ? `rgba(90, 200, 250, ${a})` : `rgba(255, 255, 255, ${a})`;
+        sCtx.beginPath();
+        sCtx.arc(st.x * sf.width, st.y * sf.height, st.r, 0, Math.PI * 2);
+        sCtx.fill();
+      });
+
+      // 2. Estrela cadente sutil (1 a cada 9–15 segundos)
+      const now = Date.now();
+      if (!shootingStar && now >= nextShootTime) {
+        const angle = (32 + Math.random() * 18) * (Math.PI / 180);
+        shootingStar = {
+          startX: (0.05 + Math.random() * 0.65) * sf.width,
+          startY: (0.04 + Math.random() * 0.42) * sf.height,
+          angle,
+          dist: 210 + Math.random() * 150,
+          tail: 95 + Math.random() * 55,
+          startMs: now,
+          durationMs: 920
+        };
+      }
+
+      if (shootingStar) {
+        const p = (now - shootingStar.startMs) / shootingStar.durationMs;
+        if (p >= 1) {
+          shootingStar = null;
+          nextShootTime = now + 9000 + Math.random() * 6000;
+        } else {
+          const env = p < 0.2 ? p / 0.2 : p > 0.7 ? (1 - p) / 0.3 : 1;
+          const curDist = shootingStar.dist * p;
+          const hx = shootingStar.startX + Math.cos(shootingStar.angle) * curDist;
+          const hy = shootingStar.startY + Math.sin(shootingStar.angle) * curDist;
+          const tx = hx - Math.cos(shootingStar.angle) * (shootingStar.tail * env);
+          const ty = hy - Math.sin(shootingStar.angle) * (shootingStar.tail * env);
+
+          const grad = sCtx.createLinearGradient(tx, ty, hx, hy);
+          grad.addColorStop(0, "transparent");
+          grad.addColorStop(0.6, `rgba(90, 200, 250, ${0.45 * env})`);
+          grad.addColorStop(1, `rgba(255, 255, 255, ${0.95 * env})`);
+
+          sCtx.strokeStyle = grad;
+          sCtx.lineWidth = 2.2;
+          sCtx.lineCap = "round";
+          sCtx.beginPath();
+          sCtx.moveTo(tx, ty);
+          sCtx.lineTo(hx, hy);
+          sCtx.stroke();
+
+          sCtx.fillStyle = `rgba(255, 255, 255, ${env})`;
+          sCtx.beginPath();
+          sCtx.arc(hx, hy, 2.2, 0, Math.PI * 2);
+          sCtx.fill();
+        }
+      }
+    }
 
     function animateSpatialLoop() {
       phase += isRunning ? 0.07 : 0.022;
 
-      const sf = document.getElementById("ambientStarsCanvas");
-      if (sf.width !== window.innerWidth) { sf.width = window.innerWidth; sf.height = window.innerHeight; }
-      const sCtx = sf.getContext("2d");
-      sCtx.clearRect(0, 0, sf.width, sf.height);
-      stars.forEach(st => {
-        const a = 0.2 + Math.sin(phase + st.p) * 0.2;
-        sCtx.fillStyle = `rgba(255,255,255,${a})`;
-        sCtx.beginPath(); sCtx.arc(st.x * sf.width, st.y * sf.height, st.r, 0, Math.PI * 2); sCtx.fill();
-      });
+      drawGlobalStarsAndMeteors();
 
       const hc = document.getElementById("heroPlanetCanvas");
       if (hc) {
@@ -1324,6 +1468,7 @@
     // RENDER ALL TABS
     // =========================================================================
     function renderAll() {
+      check5AmLogicalRollover();
       updateLiveDOM();
 
       const picker = document.getElementById("activeSubjectPicker");
@@ -1591,7 +1736,7 @@
     }
 
     // =========================================================================
-    // CROSS-PLATFORM MULTIPLAYER GROUPS (ANDROID <-> iOS SYNC)
+    // GRUPOS SINCRONIZADOS (COM AUTO-LIMPEZA DE FANTASMAS & BLOQUEIO DE BOTS)
     // =========================================================================
     let rankTab = "live";
     let roomMembers = [];
@@ -1607,7 +1752,7 @@
       state.activeRoomCode = code;
       const r = state.rooms.find(x => x.code === code) || state.rooms[0];
       document.getElementById("roomMainTitle").textContent = r.name;
-      document.getElementById("roomSubHeader").textContent = `📲 Sincronizado Android & iOS • Sala #${r.code}`;
+      document.getElementById("roomSubHeader").textContent = `🛡️ Apenas Horas Reais do Cronômetro • Sala #${r.code}`;
       saveState(); renderGroupRoomsBar(); syncFirebaseRoom();
     }
 
@@ -1619,33 +1764,77 @@
 
     async function syncFirebaseRoom() {
       try {
+        check5AmLogicalRollover();
         const verToday = Math.floor(state.verifiedSecondsToday / 60);
         const verWeek = Math.floor(state.weekSecondsByDay.reduce((a, b) => a + b, 0) / 60);
         const subjName = state.subjects[state.selectedSubjectIdx]?.name || "Geral";
-        const inits = state.userName.split(" ").map(w => w.replace(/[^a-zA-Z0-9]/g, "")).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase() || "EU";
+        const cleanName = (state.userName || "").trim();
 
-        // Usa a mesmíssima rota e campos JSON do app Android (FunctionalGroupsScreen.kt)!
-        await fetch(`${FIREBASE_DB}/rooms/${state.activeRoomCode}/members/${state.userId}.json`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id: state.userId,
-            name: state.userName,
-            initials: inits,
-            status: state.userStatus,
-            subject: subjName,
-            isStudying: isRunning,
-            minsToday: verToday,
-            minsWeek: Math.max(verWeek, verToday),
-            updatedAt: Date.now()
-          })
-        });
+        const isGhostName =
+          !cleanName ||
+          cleanName.startsWith("Estudante #") ||
+          cleanName === "Estudante iOS" ||
+          cleanName === "Estudante";
+
+        // BLOQUEIO TOTAL DE BOTS/FANTASMAS: Só envia para o Firebase se escolheu um nome real!
+        if (state.hasSetCustomName && !isGhostName) {
+          const inits = cleanName.split(" ").map(w => w.replace(/[^a-zA-Z0-9]/g, "")).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase() || "EU";
+
+          await fetch(`${FIREBASE_DB}/rooms/${state.activeRoomCode}/members/${state.userId}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: state.userId,
+              name: cleanName,
+              initials: inits,
+              status: state.userStatus,
+              subject: subjName,
+              isStudying: isRunning,
+              minsToday: verToday,
+              minsWeek: Math.max(verWeek, verToday),
+              updatedAt: Date.now()
+            })
+          });
+        }
 
         const res = await fetch(`${FIREBASE_DB}/rooms/${state.activeRoomCode}/members.json?cb=${Date.now()}`);
         const data = await res.json();
-        if (!data) return;
+        if (!data) {
+          roomMembers = [];
+          renderLeaderboard();
+          return;
+        }
 
-        roomMembers = Object.values(data).filter(m => m && m.id);
+        const seenNames = {};
+        for (const [key, m] of Object.entries(data)) {
+          if (!m || !m.name) continue;
+          const mName = String(m.name).trim();
+
+          // Detecta e apaga do Firebase qualquer usuário fantasma criado antes ("Estudante #...", "Estudante iOS", etc.)
+          const isBotOrGhost =
+            mName.startsWith("Estudante #") ||
+            mName === "Estudante iOS" ||
+            mName === "Estudante" ||
+            ((m.minsToday || 0) === 0 && (m.minsWeek || 0) === 0 && (Date.now() - (m.updatedAt || 0) > 3600000));
+
+          if (isBotOrGhost && key !== state.userId) {
+            fetch(`${FIREBASE_DB}/rooms/${state.activeRoomCode}/members/${key}.json`, { method: "DELETE" }).catch(() => {});
+            continue;
+          }
+
+          // Deduplica reinstalações da mesma pessoa mantendo o registro mais recente
+          const nameKey = mName.toLowerCase();
+          if (!seenNames[nameKey] || (m.updatedAt || 0) > (seenNames[nameKey].updatedAt || 0)) {
+            if (seenNames[nameKey] && seenNames[nameKey].id !== state.userId) {
+              fetch(`${FIREBASE_DB}/rooms/${state.activeRoomCode}/members/${seenNames[nameKey].id}.json`, { method: "DELETE" }).catch(() => {});
+            }
+            seenNames[nameKey] = m;
+          } else if (key !== state.userId) {
+            fetch(`${FIREBASE_DB}/rooms/${state.activeRoomCode}/members/${key}.json`, { method: "DELETE" }).catch(() => {});
+          }
+        }
+
+        roomMembers = Object.values(seenNames);
         renderLeaderboard();
       } catch (e) {}
     }
@@ -1669,7 +1858,13 @@
       document.getElementById("roomWeekProgressPct").textContent = `${pct}%`;
       document.getElementById("roomWeekBarFill").style.width = `${Math.max(4, pct)}%`;
 
-      document.getElementById("groupLeaderboardBox").innerHTML = list.map((m, i) => {
+      const box = document.getElementById("groupLeaderboardBox");
+      if (list.length === 0) {
+        box.innerHTML = `<div class="ios-card" style="text-align:center; color:var(--text-secondary); font-size:13px;">Toque em <strong>✏️ Perfil</strong> acima e salve seu nome para entrar no ranking ao vivo desta sala!</div>`;
+        return;
+      }
+
+      box.innerHTML = list.map((m, i) => {
         const isMe = m.id === state.userId;
         const medal = i === 0 ? "🥇 1º" : i === 1 ? "🥈 2º" : i === 2 ? "🥉 3º" : `#${i + 1}`;
         const live = m.isStudying && (Date.now() - (m.updatedAt || 0) < 900000);
@@ -1732,7 +1927,7 @@
       ctx.fillText(pos === 1 ? "👑 1º LUGAR NO RANKING DA SALA" : `🔥 TOP #${pos} NO RANKING AO VIVO`, W / 2, 340);
 
       ctx.fillStyle = "#FFFFFF"; ctx.font = "800 60px -apple-system, sans-serif";
-      ctx.fillText(state.userName, W / 2, 465);
+      ctx.fillText(state.userName || "Estudante", W / 2, 465);
 
       ctx.fillStyle = "#94A3B8"; ctx.font = "700 26px -apple-system, sans-serif";
       ctx.fillText("TEMPO LÍQUIDO ESTUDADO HOJE", W / 2, 650);
@@ -1772,7 +1967,10 @@
       const n = document.getElementById("profNameInp").value.trim();
       const s = document.getElementById("profStatusInp").value.trim();
       const r = document.getElementById("profRoomInp").value.trim().toUpperCase();
-      if (n) { state.userName = n; state.hasSetCustomName = true; }
+      if (n && !n.startsWith("Estudante #")) {
+        state.userName = n;
+        state.hasSetCustomName = true;
+      }
       if (s) state.userStatus = s;
       if (r) {
         if (!state.rooms.find(x => x.code === r)) state.rooms.push({ code: r, name: `Esquadrão ${r}`, cat: "Sincronizado Android & iOS" });
@@ -1884,10 +2082,10 @@
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id, userId: state.userId, userName: state.userName,
+            id, userId: state.userId, userName: state.userName || "Anônimo",
             category: document.getElementById("fbCatSelect").value,
             message: msg, contact: document.getElementById("fbContactInp").value.trim(),
-            appVersion: "2.5.0 iOS 18 Edition", timestamp: Date.now()
+            appVersion: "2.5.1 iOS 18 Clean Edition", timestamp: Date.now()
           })
         });
       } catch (_) {}
@@ -1920,7 +2118,6 @@
     renderAll();
     animateSpatialLoop();
     syncFirebaseRoom();
-    // Sincroniza a cada 6 segundos com os aparelhos Android e iOS!
     setInterval(syncFirebaseRoom, 6000);
   </script>
 </body>
