@@ -1,4 +1,4 @@
-const CACHE_NAME = 'estudancia-ios18-v2.5.0';
+const CACHE_NAME = 'estudancia-ios18-v2.5.1';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (e) => {
